@@ -1,2 +1,2 @@
 # poncho-bluetooth
-Repositorio para el desarrollo de un Poncho de implementación Bluetooth para la EDU-CIAA
+Repositorio para el desarrollo de un Poncho que implementa Bluetooth para la EDU-CIAA
