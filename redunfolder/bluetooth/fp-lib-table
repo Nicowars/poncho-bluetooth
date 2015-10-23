@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name Capacitors_Tantalum_SMD)(type KiCad)(uri "C:\\Documents and Settings\\barcalaa\\Desktop\\Capacitors_Tantalum_SMD.pretty-master\\Capacitors_Tantalum_SMD.pretty-master")(options "")(descr ""))
+  (lib (name Resistors_SMD)(type KiCad)(uri "C:\\Documents and Settings\\barcalaa\\Desktop\\Resistors_SMD.pretty-master\\Resistors_SMD.pretty-master")(options "")(descr ""))
+)
