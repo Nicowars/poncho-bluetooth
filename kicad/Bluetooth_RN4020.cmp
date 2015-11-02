@@ -1,59 +1,91 @@
-Cmp-Mod V01 Created by CvPcb (2013-07-07 BZR 4022)-stable date = 29/10/2015 01:02:00 p.m.
+Cmp-Mod V01 Created by PcbNew   date = 2/11/2015 17:27:53
 
 BeginCmp
-TimeStamp = /561FB9E8;
-Reference = C1;
-ValeurCmp = C;
-IdModule  = SM1206POL;
+TimeStamp = 5632354D
+Path = /561FC38B
+Reference = U1;
+ValeurCmp = RN4020;
+IdModule  = RN4020;
 EndCmp
 
 BeginCmp
-TimeStamp = /561FB9E9;
+TimeStamp = 5612FA4C
+Path = /560E549A
+Reference = XA1;
+ValeurCmp = Conn_PonchoMP_2x_20x2;
+IdModule  = Poncho_Esqueleto:Conn_Poncho_Mediano;
+EndCmp
+
+BeginCmp
+TimeStamp = 56323566
+Path = /561FB9E9
 Reference = D1;
 ValeurCmp = LED;
 IdModule  = LED-3MM;
 EndCmp
 
 BeginCmp
-TimeStamp = /561FB9ED;
+TimeStamp = 5632357F
+Path = /561FB9ED
 Reference = D2;
 ValeurCmp = LED;
 IdModule  = LED-3MM;
 EndCmp
 
 BeginCmp
-TimeStamp = /561FB9EE;
+TimeStamp = 56323598
+Path = /561FB9EE
 Reference = D3;
 ValeurCmp = LED;
 IdModule  = LED-3MM;
 EndCmp
 
 BeginCmp
-TimeStamp = /561FB9E7;
+TimeStamp = 5637C27B
+Path = /561FB9E8
+Reference = C1;
+ValeurCmp = C;
+IdModule  = Capacitors_Tantalum_SMD:TantalC_SizeA_EIA-3216_HandSoldering;
+EndCmp
+
+BeginCmp
+TimeStamp = 5637C281
+Path = /561FB9E7
 Reference = R1;
 ValeurCmp = R;
-IdModule  = SM1206;
+IdModule  = Resistors_SMD:R_1206_HandSoldering;
 EndCmp
 
 BeginCmp
-TimeStamp = /561FB9EB;
-Reference = R2;
-ValeurCmp = R;
-IdModule  = SM1206;
+TimeStamp = 5637C46E
+Path = 
+Reference = REF**;
+ValeurCmp = TantalC_SizeB_EIA-3528_Reflow;
+IdModule  = Capacitors_Tantalum_SMD:TantalC_SizeB_EIA-3528_Reflow;
 EndCmp
 
 BeginCmp
-TimeStamp = /561FB9EC;
+TimeStamp = 5637C4BC
+Path = 
+Reference = REF**;
+ValeurCmp = TantalC_SizeB_EIA-3528_Wave;
+IdModule  = Capacitors_Tantalum_SMD:TantalC_SizeB_EIA-3528_Wave;
+EndCmp
+
+BeginCmp
+TimeStamp = 5637C28D
+Path = /561FB9EC
 Reference = R3;
 ValeurCmp = R;
-IdModule  = SM1206;
+IdModule  = Resistors_SMD:R_1206;
 EndCmp
 
 BeginCmp
-TimeStamp = /561FC38B;
-Reference = U1;
-ValeurCmp = RN4020;
-IdModule  = RN4020;
+TimeStamp = 5637C287
+Path = /561FB9EB
+Reference = R2;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_1206;
 EndCmp
 
 EndListe
