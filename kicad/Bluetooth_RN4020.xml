@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>C:/Documents and Settings/Barcala/Desktop/poncho-bluetooth-master/poncho-bluetooth-master/kicad/Bluetooth_RN4020.sch</source>
+    <date>05/11/2015 12:40:57 p.m.</date>
+    <tool>Eeschema (2015-09-09 BZR 6176, Git 1d4a46d)-product</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date>29 oct 2015</date>
+        <source>Bluetooth_RN4020.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="R1">
+      <value>R</value>
+      <footprint>Resistors_SMD:R_1206</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>561FB9E7</tstamp>
+    </comp>
+    <comp ref="D1">
+      <value>LED</value>
+      <footprint>LEDs:LED-3MM</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>561FB9E9</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>R</value>
+      <footprint>Resistors_SMD:R_1206</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>561FB9EB</tstamp>
+    </comp>
+    <comp ref="R3">
+      <value>R</value>
+      <footprint>Resistors_SMD:R_1206</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>561FB9EC</tstamp>
+    </comp>
+    <comp ref="D2">
+      <value>LED</value>
+      <footprint>LEDs:LED-3MM</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>561FB9ED</tstamp>
+    </comp>
+    <comp ref="D3">
+      <value>LED</value>
+      <footprint>LEDs:LED-3MM</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>561FB9EE</tstamp>
+    </comp>
+    <comp ref="U1">
+      <value>RN4020</value>
+      <footprint>RN4020:RN4020</footprint>
+      <libsource lib="RN4020" part="RN4020"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>561FC38B</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>CP1</value>
+      <footprint>Capacitors_Tantalum_SMD:TantalC_SizeB_EIA-3528_Reflow</footprint>
+      <libsource lib="device" part="CP1"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5637C0B9</tstamp>
+    </comp>
+    <comp ref="XA1">
+      <value>Conn_PonchoMP_2x_20x2</value>
+      <libsource lib="Poncho_Esqueleto" part="Conn_PonchoMP_2x_20x2"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>563B682E</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="RN4020" part="RN4020">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">RN4020</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="power_in"/>
+        <pin num="2" name="AIO2" type="BiDi"/>
+        <pin num="3" name="AIO1" type="BiDi"/>
+        <pin num="4" name="AIO0" type="BiDi"/>
+        <pin num="5" name="UART_TX" type="output"/>
+        <pin num="6" name="UART_RX" type="input"/>
+        <pin num="7" name="WAKE_SW" type="input"/>
+        <pin num="8" name="CMD/MDLP" type="input"/>
+        <pin num="9" name="GND" type="power_in"/>
+        <pin num="10" name="PIO1/SCK" type="BiDi"/>
+        <pin num="11" name="MLDP_EV/PIO2/SS" type="BiDi"/>
+        <pin num="12" name="WS/PIO3/MOSI" type="BiDi"/>
+        <pin num="13" name="PIO4/MISO" type="BiDi"/>
+        <pin num="14" name="CTS/PIO5" type="BiDi"/>
+        <pin num="15" name="WAKE_HW" type="input"/>
+        <pin num="16" name="GND" type="power_in"/>
+        <pin num="17" name="SPI/PIO" type="input"/>
+        <pin num="18" name="RTS/PIO6" type="BiDi"/>
+        <pin num="19" name="PIO7" type="BiDi"/>
+        <pin num="20" name="RSVD" type="NotConnected"/>
+        <pin num="21" name="RSVD" type="NotConnected"/>
+        <pin num="22" name="RSVD" type="NotConnected"/>
+        <pin num="23" name="VDD" type="power_in"/>
+        <pin num="24" name="GND" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Poncho_Esqueleto" part="Conn_PonchoMP_2x_20x2">
+      <fields>
+        <field name="Reference">XA</field>
+        <field name="Value">Conn_PonchoMP_2x_20x2</field>
+      </fields>
+      <pins>
+        <pin num="1" name="+3.3V" type="passive"/>
+        <pin num="2" name="+5V" type="passive"/>
+        <pin num="3" name="RESET" type="passive"/>
+        <pin num="4" name="GND" type="passive"/>
+        <pin num="5" name="ISP" type="passive"/>
+        <pin num="6" name="WAKEUP" type="passive"/>
+        <pin num="7" name="GNDA" type="passive"/>
+        <pin num="8" name="GNDA" type="passive"/>
+        <pin num="9" name="ADC3" type="passive"/>
+        <pin num="10" name="GNDA" type="passive"/>
+        <pin num="11" name="ADC2" type="passive"/>
+        <pin num="12" name="GNDA" type="passive"/>
+        <pin num="13" name="ADC1" type="passive"/>
+        <pin num="14" name="GNDA" type="passive"/>
+        <pin num="15" name="DAC" type="passive"/>
+        <pin num="16" name="GNDA" type="passive"/>
+        <pin num="17" name="VDDA" type="passive"/>
+        <pin num="18" name="GNDA" type="passive"/>
+        <pin num="19" name="SDA" type="passive"/>
+        <pin num="20" name="GND" type="passive"/>
+        <pin num="21" name="SCL" type="passive"/>
+        <pin num="22" name="GND" type="passive"/>
+        <pin num="23" name="RXD" type="passive"/>
+        <pin num="24" name="GND" type="passive"/>
+        <pin num="25" name="TXD" type="passive"/>
+        <pin num="26" name="GND" type="passive"/>
+        <pin num="27" name="RD" type="passive"/>
+        <pin num="28" name="GND" type="passive"/>
+        <pin num="29" name="TD" type="passive"/>
+        <pin num="30" name="GND" type="passive"/>
+        <pin num="31" name="COL1" type="passive"/>
+        <pin num="32" name="GND" type="passive"/>
+        <pin num="33" name="F0" type="passive"/>
+        <pin num="34" name="COL2" type="passive"/>
+        <pin num="35" name="F3" type="passive"/>
+        <pin num="36" name="F1" type="passive"/>
+        <pin num="37" name="F2" type="passive"/>
+        <pin num="38" name="GND" type="passive"/>
+        <pin num="39" name="COL0" type="passive"/>
+        <pin num="40" name="GND" type="passive"/>
+        <pin num="41" name="+3.3V" type="passive"/>
+        <pin num="42" name="+5V" type="passive"/>
+        <pin num="43" name="GND" type="passive"/>
+        <pin num="44" name="RXD1" type="passive"/>
+        <pin num="45" name="GND" type="passive"/>
+        <pin num="46" name="TXEN" type="passive"/>
+        <pin num="47" name="GND" type="passive"/>
+        <pin num="48" name="MDC" type="passive"/>
+        <pin num="49" name="RXD0" type="passive"/>
+        <pin num="50" name="CRS" type="passive"/>
+        <pin num="51" name="GND" type="passive"/>
+        <pin num="52" name="MDIO" type="passive"/>
+        <pin num="53" name="GND" type="passive"/>
+        <pin num="54" name="TXD0" type="passive"/>
+        <pin num="55" name="RCLCK" type="passive"/>
+        <pin num="56" name="TXD1" type="passive"/>
+        <pin num="57" name="GND" type="passive"/>
+        <pin num="58" name="MISO" type="passive"/>
+        <pin num="59" name="GND" type="passive"/>
+        <pin num="60" name="SCK" type="passive"/>
+        <pin num="61" name="MOSI" type="passive"/>
+        <pin num="62" name="LCD4" type="passive"/>
+        <pin num="63" name="LCD3" type="passive"/>
+        <pin num="64" name="RS" type="passive"/>
+        <pin num="65" name="GND" type="passive"/>
+        <pin num="67" name="GND" type="passive"/>
+        <pin num="68" name="LCD2" type="passive"/>
+        <pin num="69" name="GPIO0" type="passive"/>
+        <pin num="70" name="LCD1" type="passive"/>
+        <pin num="71" name="GPIO2" type="passive"/>
+        <pin num="72" name="GPIO1" type="passive"/>
+        <pin num="73" name="GPIO4" type="passive"/>
+        <pin num="74" name="GPIO3" type="passive"/>
+        <pin num="75" name="GPIO6" type="passive"/>
+        <pin num="76" name="GPIO5" type="passive"/>
+        <pin num="77" name="GND" type="passive"/>
+        <pin num="78" name="GPIO7" type="passive"/>
+        <pin num="79" name="GND" type="passive"/>
+        <pin num="80" name="GPIO8" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="CP1">
+      <description>Polarised capacitor</description>
+      <footprints>
+        <fp>SMD*_Pol</fp>
+        <fp>c_elec*</fp>
+        <fp>C*elec</fp>
+        <fp>TantalC*</fp>
+        <fp>Elko*</fp>
+        <fp>CP*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">CP1</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="LED">
+      <footprints>
+        <fp>LED-3MM</fp>
+        <fp>LED-5MM</fp>
+        <fp>LED-10MM</fp>
+        <fp>LED-0603</fp>
+        <fp>LED-0805</fp>
+        <fp>LED-1206</fp>
+        <fp>LEDV</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">LED</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Poncho_Esqueleto">
+      <uri>C:\Documents and Settings\Barcala\Desktop\poncho-bluetooth-master\poncho-bluetooth-master\kicad\libPonchos\Poncho_Esqueleto.lib</uri>
+    </library>
+    <library logical="RN4020">
+      <uri>C:\Documents and Settings\Barcala\Desktop\poncho-bluetooth-master\poncho-bluetooth-master\kicad\libBluetooth_RN4020\RN4020.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>C:\Program Files\KiCad\share\kicad\library\device.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(U1-Pad7)">
+      <node ref="U1" pin="7"/>
+      <node ref="XA1" pin="72"/>
+    </net>
+    <net code="2" name="Net-(U1-Pad6)">
+      <node ref="U1" pin="6"/>
+      <node ref="XA1" pin="23"/>
+    </net>
+    <net code="3" name="+3V3">
+      <node ref="C1" pin="1"/>
+      <node ref="U1" pin="23"/>
+    </net>
+    <net code="4" name="Net-(D1-Pad2)">
+      <node ref="D1" pin="2"/>
+      <node ref="R1" pin="2"/>
+    </net>
+    <net code="5" name="Net-(D2-Pad2)">
+      <node ref="R2" pin="2"/>
+      <node ref="D2" pin="2"/>
+    </net>
+    <net code="6" name="Net-(D3-Pad2)">
+      <node ref="R3" pin="2"/>
+      <node ref="D3" pin="2"/>
+    </net>
+    <net code="7" name="Net-(R3-Pad1)">
+      <node ref="R3" pin="1"/>
+      <node ref="U1" pin="12"/>
+    </net>
+    <net code="8" name="Net-(R1-Pad1)">
+      <node ref="U1" pin="10"/>
+      <node ref="R1" pin="1"/>
+    </net>
+    <net code="9" name="Net-(R2-Pad1)">
+      <node ref="R2" pin="1"/>
+      <node ref="U1" pin="11"/>
+    </net>
+    <net code="10" name="GND">
+      <node ref="D2" pin="1"/>
+      <node ref="U1" pin="1"/>
+      <node ref="U1" pin="9"/>
+      <node ref="U1" pin="24"/>
+      <node ref="U1" pin="16"/>
+      <node ref="D3" pin="1"/>
+      <node ref="C1" pin="2"/>
+      <node ref="D1" pin="1"/>
+    </net>
+    <net code="11" name="Net-(XA1-Pad69)">
+      <node ref="XA1" pin="69"/>
+    </net>
+    <net code="12" name="Net-(U1-Pad15)">
+      <node ref="U1" pin="15"/>
+      <node ref="XA1" pin="78"/>
+    </net>
+    <net code="13" name="Net-(U1-Pad14)">
+      <node ref="U1" pin="14"/>
+      <node ref="XA1" pin="76"/>
+    </net>
+    <net code="14" name="Net-(XA1-Pad75)">
+      <node ref="XA1" pin="75"/>
+    </net>
+    <net code="15" name="Net-(XA1-Pad71)">
+      <node ref="XA1" pin="71"/>
+    </net>
+    <net code="16" name="Net-(XA1-Pad73)">
+      <node ref="XA1" pin="73"/>
+    </net>
+    <net code="17" name="Net-(U1-Pad8)">
+      <node ref="XA1" pin="74"/>
+      <node ref="U1" pin="8"/>
+    </net>
+    <net code="18" name="Net-(U1-Pad18)">
+      <node ref="U1" pin="18"/>
+      <node ref="XA1" pin="80"/>
+    </net>
+    <net code="19" name="Net-(U1-Pad5)">
+      <node ref="U1" pin="5"/>
+      <node ref="XA1" pin="25"/>
+    </net>
+    <net code="20" name="Net-(U1-Pad2)">
+      <node ref="U1" pin="2"/>
+    </net>
+    <net code="21" name="Net-(U1-Pad3)">
+      <node ref="U1" pin="3"/>
+    </net>
+    <net code="22" name="Net-(U1-Pad4)">
+      <node ref="U1" pin="4"/>
+    </net>
+    <net code="23" name="Net-(U1-Pad13)">
+      <node ref="U1" pin="13"/>
+    </net>
+    <net code="24" name="Net-(U1-Pad17)">
+      <node ref="U1" pin="17"/>
+    </net>
+    <net code="25" name="Net-(U1-Pad19)">
+      <node ref="U1" pin="19"/>
+    </net>
+    <net code="26" name="Net-(U1-Pad22)">
+      <node ref="U1" pin="22"/>
+    </net>
+    <net code="27" name="Net-(U1-Pad21)">
+      <node ref="U1" pin="21"/>
+    </net>
+    <net code="28" name="Net-(U1-Pad20)">
+      <node ref="U1" pin="20"/>
+    </net>
+  </nets>
+</export>
