@@ -1,0 +1,6 @@
+(fp_lib_table
+  (lib (name Capacitors_Tantalum_SMD)(type KiCad)(uri D:\Documentos\GitHub\poncho-bluetooth\Footprints\Capacitors_Tantalum_SMD.pretty-master)(options "")(descr ""))
+  (lib (name RN4020)(type KiCad)(uri D:\Documentos\GitHub\poncho-bluetooth\Footprints\RN4020)(options "")(descr ""))
+  (lib (name Poncho_Modelos)(type KiCad)(uri "$(KIPRJMOD)\\Poncho_Modelos.pretty")(options "")(descr ""))
+  (lib (name Poncho_Esqueleto)(type KiCad)(uri "$(KIPRJMOD)\\Poncho_Esqueleto.pretty")(options "")(descr ""))
+)
