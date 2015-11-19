@@ -1,9 +1,9 @@
-(kicad_pcb (version 4) (host pcbnew "(2015-09-09 BZR 6176, Git 1d4a46d)-product")
+(kicad_pcb (version 4) (host pcbnew 4.0.0-rc1-stable)
 
   (general
     (links 23)
     (no_connects 0)
-    (area 106.349999 57.849999 194.300002 157.51287)
+    (area 106.349999 57.849999 194.300002 143.675001)
     (thickness 1.6)
     (drawings 4)
     (tracks 109)
@@ -48,7 +48,7 @@
   )
 
   (setup
-    (last_trace_width 0.6)
+    (last_trace_width 0.381)
     (user_trace_width 0.508)
     (user_trace_width 0.508)
     (user_trace_width 0.6)
@@ -113,7 +113,7 @@
       (mirror false)
       (drillshape 1)
       (scaleselection 1)
-      (outputdirectory ../../))
+      (outputdirectory ../))
   )
 
   (net 0 "")
@@ -1068,7 +1068,7 @@
   (segment (start 147.20006 111.45112) (end 150.85 115.10106) (width 1) (layer F.Cu) (net 8))
   (segment (start 147.20052 111.45066) (end 147.20006 111.45112) (width 0.6) (layer F.Cu) (net 8) (tstamp 5637EA99))
   (segment (start 150.85 123.75) (end 150.85046 123.74954) (width 0.6) (layer F.Cu) (net 8))
-  (segment (start 156.25 127.7) (end 160.57 127.7) (width 0.6) (layer F.Cu) (net 22) (status 400000))
+  (segment (start 156.25 127.7) (end 160.57 127.7) (width 0.6) (layer F.Cu) (net 22))
   (segment (start 122.61566 103.1) (end 116.66 103.1) (width 1) (layer F.Cu) (net 22) (tstamp 5640D152))
   (segment (start 124.91046 100.8052) (end 122.61566 103.1) (width 1) (layer F.Cu) (net 22) (tstamp 5640D14C))
   (segment (start 124.91046 96.4852) (end 124.91046 100.8052) (width 1) (layer F.Cu) (net 22) (tstamp 5640D147))
