@@ -67,11 +67,13 @@
  */
 
 /*==================[inclusions]=============================================*/
-#include "chip.h"
+//#include "chip.h"
 #include "os.h"               /* <= operating system header */
 #include "ciaaPOSIX_stdio.h"  /* <= device handler header */
 #include "ciaaPOSIX_string.h" /* <= string header */
 #include "ciaak.h"            /* <= ciaa kernel header */
+
+#include "rn4020.h"
 #include "bluetooth-rn4020.h"         /* <= own header */
 
 
@@ -88,7 +90,12 @@
  * Device path /dev/dio/out/0
  */
 static int32_t fd_out;
-static RINGBUFF_T * pRB;
+
+/** \brief File descriptor of the RS232 uart
+ *
+ * Device path /dev/serial/uart/2
+ */
+static int32_t fd_uart2;
 
 /*==================[external data definition]===============================*/
 
@@ -140,64 +147,7 @@ void ErrorHook(void)
    ShutdownOS(0);
 }
 
-void rn4020_init(void){
-	/*
-	CTS (14) OUTPUT (GPIO5)
-	pinNamePort = 6;
-	pinNamePin  = 9;
-	func        = FUNC0;
-	gpioPort    = 3;
-	gpioPin     = 5;
-	 */
 
-	Chip_SCU_PinMux(6, 9, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, FUNC0);
-
-	/*
-	RTS (18) INPUT (GPIO8)
-	pinNamePort = 6;
-	pinNamePin  = 12;
-	func        = FUNC0;
-	gpioPort    = 2;
-	gpioPin     = 8;
-	 */
-
-	//PULLDOWN
-
-	Chip_SCU_PinMux(6, 12, SCU_MODE_PULLDOWN | SCU_MODE_INBUFF_EN | SCU_MODE_ZIF_DIS, FUNC0);
-
-	/*
-	CMD (8) OUTPUT (GPIO3)
-	pinNamePort = 6;
-	pinNamePin  = 7;
-	func        = FUNC4;
-	gpioPort    = 5;
-	gpioPin     = 15;
-	*/
-
-	Chip_SCU_PinMux(6, 7, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, FUNC4);
-
-	/*
-	WAKE_HW (15) OUTPUT (GPIO7)
-	pinNamePort = 6;
-	pinNamePin  = 11;
-	func        = FUNC0;
-	gpioPort    = 3;
-	gpioPin     = 7;
-	 */
-
-	Chip_SCU_PinMux(6, 11, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, FUNC0);
-
-	/*
-	WAKE_SW (7) OUTPUT (GPIO1)
-	pinNamePort = 6;
-	pinNamePin  = 4;
-	func        = FUNC0;
-	gpioPort    = 3;
-	gpioPin     = 3;
-	*/
-
-	Chip_SCU_PinMux(6, 4, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, FUNC0);
-}
 
 /** \brief Initial task
  *
@@ -211,51 +161,38 @@ TASK(InitTask)
    /* print message (only on x86) */
    ciaaPOSIX_printf("Init Task...\n");
 
-   ciaaPOSIX_write(fd_uart1);
+   rn4020_init();
 
    /* open CIAA digital outputs */
    fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
 
-   rn4020_init();
+   /* open UART connected to RS232 connector */
+   fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", O_RDWR);
 
-   //RingBuffer_Init(pRB, NULL, sizeof(char), 16);
-
-   Chip_UART_Init(LPC_USART3);
-   Chip_UART_TXEnable(LPC_USART3);
-   Chip_UART_SetBaud(LPC_USART3, 115200);
-
-   /* Set the WAKE_SW pin high to enter Command mode. */
-   /* Escribir
-      gpioPort    = 3;
-      gpioPin     = 3;
-      value     = 1; */
-   Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 3, 1);
-
-
+   /* change baud rate for uart RS232 */
+   //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_BAUDRATE, (void *)ciaaBAUDRATE_115200);
 
    /*Issue the command SF,1 to reset to the factory default configuration.*/
-   Chip_UART_SendBlocking(LPC_USART3, "SF,1\n", 5);
+   ciaaPOSIX_write(fd_uart2, "SF,1\n", 5);
+   //Chip_UART_SendBlocking(LPC_USART3, "SF,1\n", 5);
    //Chip_UART_SendRB(LPC_USART3, pRB, "SF,1\r", 5);
 
-
-	/*Issue the command SS,C0000000 to enable support of the Device Information and Battery services.*/
-  // Chip_UART_SendBlocking(LPC_UART1, "SS,C0000000\r", 12);
-
+   /*Issue the command SS,C0000000 to enable support of the Device Information and Battery services.*/
+   ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12);
+   //Chip_UART_SendBlocking(LPC_UART1, "SS,C0000000\r", 12);
    //Chip_UART_SendRB(LPC_USART3, pRB, "SS,C0000000\r", 12);
 
-
-	/*Issue the command SR,00000000 to set the RN4020 module as a peripheral. */
-  // Chip_UART_SendBlocking(LPC_UART1, "SR,00000000\r", 12);
-
+   /*Issue the command SR,00000000 to set the RN4020 module as a peripheral. */
+   ciaaPOSIX_write(fd_uart2, "SR,00000000\n", 12);
+   //Chip_UART_SendBlocking(LPC_UART1, "SR,00000000\r", 12);
    //Chip_UART_SendRB(LPC_USART3, pRB, "SR,00000000\r", 12);
 
+   /* Issue the command R,1 to reboot the RN4020 module and to make the new settings effective.*/
+   ciaaPOSIX_write(fd_uart2, "R,1\n", 4);
+   //Chip_UART_SendBlocking(LPC_USART3, "R,1\n", 5);
+   //Chip_UART_SendRB(LPC_USART3, pRB, "R,1\n", 4);
 
-	/* Issue the command R,1 to reboot the RN4020 module and to make the new settings effective.*/
-   Chip_UART_SendBlocking(LPC_USART3, "R,1\n", 5);
-
-  // Chip_UART_SendRB(LPC_USART3, pRB, "R,1\n", 4);
-
-  Chip_UART_SendBlocking(LPC_USART3, "A\n", 2);
+   ciaaPOSIX_write(fd_uart2, "A\n", 2);
 
    /* activate periodic task:
     *  - for the first time after 350 ticks (350 ms)
@@ -282,7 +219,7 @@ TASK(PeriodicTask)
 
    /* blink output */
    ciaaPOSIX_read(fd_out, &outputs, 1);
-   outputs ^= 0x41;
+   outputs ^= 0x20;
    ciaaPOSIX_write(fd_out, &outputs, 1);
 
    /* terminate task */
