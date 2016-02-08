@@ -155,6 +155,7 @@ void ErrorHook(void)
  */
 TASK(InitTask)
 {
+	char lector[5]= "j";
    /* init CIAA kernel and devices */
    ciaak_start();
 
@@ -167,15 +168,20 @@ TASK(InitTask)
    fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
 
    /* open UART connected to RS232 connector */
-   fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", O_RDWR);
+   fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
 
    /* change baud rate for uart RS232 */
    //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_BAUDRATE, (void *)ciaaBAUDRATE_115200);
+
+   // Issue the “+” command to turn on echo
+   ciaaPOSIX_write(fd_uart2, "+\n", 2);
 
    /*Issue the command SF,1 to reset to the factory default configuration.*/
    ciaaPOSIX_write(fd_uart2, "SF,1\n", 5);
    //Chip_UART_SendBlocking(LPC_USART3, "SF,1\n", 5);
    //Chip_UART_SendRB(LPC_USART3, pRB, "SF,1\r", 5);
+
+   ciaaPOSIX_read(fd_uart2, lector, 1);
 
    /*Issue the command SS,C0000000 to enable support of the Device Information and Battery services.*/
    ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12);

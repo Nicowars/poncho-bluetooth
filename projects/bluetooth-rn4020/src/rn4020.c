@@ -60,7 +60,17 @@ void rn4020_init(void){
 	   gpioPort    = 3;
 	   gpioPin     = 3;
 	   value     = 1; */
+	Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 3, 0);
 	Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 3, 1);
+
+	// CTS
+	//Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 5, 0);
+
+	// WAKE_HW
+	//Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 7, 0);
+
+	// CMD
+	//Chip_GPIO_SetPinState( LPC_GPIO_PORT, 5, 15, 0);
 
 
 }
