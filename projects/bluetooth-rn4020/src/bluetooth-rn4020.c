@@ -85,17 +85,30 @@
 
 /*==================[internal data definition]===============================*/
 
+/** \brief File descriptor for digital input ports
+ *
+ * Device path /dev/dio/in/0
+ */
+static int32_t fd_in;
+
 /** \brief File descriptor for digital output ports
  *
  * Device path /dev/dio/out/0
  */
 static int32_t fd_out;
 
+/** \brief File descriptor of the USB uart
+ *
+ * Device path /dev/serial/uart/1
+ */
+static int32_t fd_uart1;
+
 /** \brief File descriptor of the RS232 uart
  *
  * Device path /dev/serial/uart/2
  */
 static int32_t fd_uart2;
+
 
 /*==================[external data definition]===============================*/
 
@@ -155,20 +168,20 @@ void ErrorHook(void)
  */
 TASK(InitTask)
 {
-	char lector[5]= "j";
+	//char lector[5]= "j";
    /* init CIAA kernel and devices */
-   ciaak_start();
+   //ciaak_start();
 
    /* print message (only on x86) */
-   ciaaPOSIX_printf("Init Task...\n");
+   //ciaaPOSIX_printf("Init Task...\n");
 
-   rn4020_init();
+   //rn4020_init();
 
    /* open CIAA digital outputs */
-   fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
+   //fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
 
    /* open UART connected to RS232 connector */
-   fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
+   //fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
 
    /* change baud rate for uart RS232 */
    //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_BAUDRATE, (void *)ciaaBAUDRATE_115200);
@@ -177,38 +190,112 @@ TASK(InitTask)
    //ciaaPOSIX_write(fd_uart2, "+\n", 2);
 
    /*Issue the command SF,1 to reset to the factory default configuration.*/
-   ciaaPOSIX_write(fd_uart2, "SF,1\n", 5);
+   //ciaaPOSIX_write(fd_uart2, "SF,1\n", 5);
    //Chip_UART_SendBlocking(LPC_USART3, "SF,1\n", 5);
    //Chip_UART_SendRB(LPC_USART3, pRB, "SF,1\r", 5);
 
    //ciaaPOSIX_read(fd_uart2, lector, 1);
 
    /*Issue the command SS,C0000000 to enable support of the Device Information and Battery services.*/
-   ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12);
+   //ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12);
    //Chip_UART_SendBlocking(LPC_UART1, "SS,C0000000\r", 12);
    //Chip_UART_SendRB(LPC_USART3, pRB, "SS,C0000000\r", 12);
 
    /*Issue the command SR,00000000 to set the RN4020 module as a peripheral. */
-   ciaaPOSIX_write(fd_uart2, "SR,00000000\n", 12);
+   //ciaaPOSIX_write(fd_uart2, "SR,00000000\n", 12);
    //Chip_UART_SendBlocking(LPC_UART1, "SR,00000000\r", 12);
    //Chip_UART_SendRB(LPC_USART3, pRB, "SR,00000000\r", 12);
 
    /* Issue the command R,1 to reboot the RN4020 module and to make the new settings effective.*/
-   ciaaPOSIX_write(fd_uart2, "R,1\n", 4);
+   //ciaaPOSIX_write(fd_uart2, "R,1\n", 4);
    //Chip_UART_SendBlocking(LPC_USART3, "R,1\n", 5);
    //Chip_UART_SendRB(LPC_USART3, pRB, "R,1\n", 4);
 
-   ciaaPOSIX_write(fd_uart2, "A\n", 2);
+   //ciaaPOSIX_write(fd_uart2, "A\n", 2);
 
-   /* activate periodic task:
-    *  - for the first time after 350 ticks (350 ms)
-    *  - and then every 250 ticks (250 ms)
-    */
-   SetRelAlarm(ActivatePeriodicTask, 350, 250);
+	/* init CIAA kernel and devices */
+	   ciaak_start();
 
-   /* terminate task */
-   TerminateTask();
+	   ciaaPOSIX_printf("Init Task...\n");
+	   /* open CIAA digital inputs */
+	   fd_in = ciaaPOSIX_open("/dev/dio/in/0", ciaaPOSIX_O_RDONLY);
+
+	   /* open CIAA digital outputs */
+	   fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
+
+	   /* open UART connected to USB bridge (FT2232) */
+	   fd_uart1 = ciaaPOSIX_open("/dev/serial/uart/1", ciaaPOSIX_O_RDWR);
+
+	   /* open UART connected to RS232 connector */
+	   fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
+
+	   /* change baud rate for uart usb */
+	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_BAUDRATE, (void *)ciaaBAUDRATE_115200);
+
+	   /* change FIFO TRIGGER LEVEL for uart usb */
+	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
+
+	   /* activate example tasks */
+	   SetRelAlarm(ActivatePeriodicTask, 200, 200);
+
+	   /* Activates the SerialEchoTask task */
+	   ActivateTask(SerialEchoTaskUno);
+	   ActivateTask(SerialEchoTaskDos);
+
+	   /* end InitTask */
+	   TerminateTask();
 }
+TASK(SerialEchoTaskUno)
+{
+   int8_t buf[20];   /* buffer for uart operation              */
+   uint8_t outputs;  /* to store outputs status                */
+   int32_t ret;      /* return value variable for posix calls  */
+
+   ciaaPOSIX_printf("SerialEchoTask...\n");
+   /* send a message to the world :) */
+   char message[] = "\n\rIniciando RN-4020\n\r";
+   ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
+
+   while(1)
+   {
+      /* wait for any character ... */
+      ret = ciaaPOSIX_read(fd_uart1, buf, 20);
+
+      if(ret > 0)
+      {
+
+         /* also write them to the other device */
+         ciaaPOSIX_write(fd_uart2, buf, ret);
+      }
+
+      /* blink output 5 with each loop */
+      ciaaPOSIX_read(fd_out, &outputs, 1);
+      outputs ^= 0x20;
+      ciaaPOSIX_write(fd_out, &outputs, 1);
+   }
+}
+
+TASK(SerialEchoTaskDos)
+{
+   int8_t buf[20];   /* buffer for uart operation              */
+   int32_t ret;      /* return value variable for posix calls  */
+
+
+   while(1)
+   {
+
+      ret = ciaaPOSIX_read(fd_uart2, buf, 20);
+
+      if(ret > 0)
+      {
+         /* ... and write them to the same device */
+         ciaaPOSIX_write(fd_uart1, buf, ret);
+
+      }
+
+   }
+}
+
 
 /** \brief Periodic Task
  *
@@ -218,17 +305,32 @@ TASK(InitTask)
  */
 TASK(PeriodicTask)
 {
-   uint8_t outputs;
+   /*
+    * Example:
+    *    Read inputs 0..3, update outputs 0..3.
+    *    Blink output 4
+    */
 
-   /* write blinking message */
-   ciaaPOSIX_printf("Blinking\n");
+   /* variables to store input/output status */
+   uint8_t inputs = 0, outputs = 0;
 
-   /* blink output */
+   /* read inputs */
+   ciaaPOSIX_read(fd_in, &inputs, 1);
+
+   /* read outputs */
    ciaaPOSIX_read(fd_out, &outputs, 1);
-   outputs ^= 0x20;
+
+   /* update outputs with inputs */
+   outputs &= 0xF0;
+   outputs |= inputs & 0x0F;
+
+   /* blink */
+   outputs ^= 0x10;
+
+   /* write */
    ciaaPOSIX_write(fd_out, &outputs, 1);
 
-   /* terminate task */
+   /* end PeriodicTask */
    TerminateTask();
 }
 
