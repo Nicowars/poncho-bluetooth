@@ -85,12 +85,6 @@
 
 /*==================[internal data definition]===============================*/
 
-/** \brief File descriptor for digital input ports
- *
- * Device path /dev/dio/in/0
- */
-static int32_t fd_in;
-
 /** \brief File descriptor for digital output ports
  *
  * Device path /dev/dio/out/0
@@ -168,58 +162,12 @@ void ErrorHook(void)
  */
 TASK(InitTask)
 {
-	//char lector[5]= "j";
-   /* init CIAA kernel and devices */
-   //ciaak_start();
-
-   /* print message (only on x86) */
-   //ciaaPOSIX_printf("Init Task...\n");
-
-
-
-   /* open CIAA digital outputs */
-   //fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
-
-   /* open UART connected to RS232 connector */
-   //fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
-
-   /* change baud rate for uart RS232 */
-   //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_BAUDRATE, (void *)ciaaBAUDRATE_115200);
-
-   // Issue the “+” command to turn on echo
-   //ciaaPOSIX_write(fd_uart2, "+\n", 2);
-
-   /*Issue the command SF,1 to reset to the factory default configuration.*/
-   //ciaaPOSIX_write(fd_uart2, "SF,1\n", 5);
-   //Chip_UART_SendBlocking(LPC_USART3, "SF,1\n", 5);
-   //Chip_UART_SendRB(LPC_USART3, pRB, "SF,1\r", 5);
-
-   //ciaaPOSIX_read(fd_uart2, lector, 1);
-
-   /*Issue the command SS,C0000000 to enable support of the Device Information and Battery services.*/
-   //ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12);
-   //Chip_UART_SendBlocking(LPC_UART1, "SS,C0000000\r", 12);
-   //Chip_UART_SendRB(LPC_USART3, pRB, "SS,C0000000\r", 12);
-
-   /*Issue the command SR,00000000 to set the RN4020 module as a peripheral. */
-   //ciaaPOSIX_write(fd_uart2, "SR,00000000\n", 12);
-   //Chip_UART_SendBlocking(LPC_UART1, "SR,00000000\r", 12);
-   //Chip_UART_SendRB(LPC_USART3, pRB, "SR,00000000\r", 12);
-
-   /* Issue the command R,1 to reboot the RN4020 module and to make the new settings effective.*/
-   //ciaaPOSIX_write(fd_uart2, "R,1\n", 4);
-   //Chip_UART_SendBlocking(LPC_USART3, "R,1\n", 5);
-   //Chip_UART_SendRB(LPC_USART3, pRB, "R,1\n", 4);
-
-   //ciaaPOSIX_write(fd_uart2, "A\n", 2);
 
 	/* init CIAA kernel and devices */
 	   ciaak_start();
 
 	   ciaaPOSIX_printf("Init Task...\n");
 	   rn4020_init();
-	   /* open CIAA digital inputs */
-	   fd_in = ciaaPOSIX_open("/dev/dio/in/0", ciaaPOSIX_O_RDONLY);
 
 	   /* open CIAA digital outputs */
 	   fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
@@ -241,13 +189,8 @@ TASK(InitTask)
 
 	   ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
 
-	  // ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
-
-	 //  ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
-
-
-	   /* activate example tasks */
-	   SetRelAlarm(ActivatePeriodicTask, 200, 200);
+	   //ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
+	   //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
 
 	   /* Activates the SerialEchoTask task */
 	   ActivateTask(SerialEchoTaskUno);
@@ -294,10 +237,6 @@ TASK(SerialEchoTaskUno)
 
       }
 
-      /* blink output 5 with each loop */
-    /*  ciaaPOSIX_read(fd_out, &outputs, 1);
-      outputs ^= 0x20;
-      ciaaPOSIX_write(fd_out, &outputs, 1);*/
    }
 }
 
@@ -323,44 +262,6 @@ TASK(SerialEchoTaskDos)
       }
 
    }
-}
-
-
-/** \brief Periodic Task
- *
- * This task is started automatically every time that the alarm
- * ActivatePeriodicTask expires.
- *
- */
-TASK(PeriodicTask)
-{
-   /*
-    * Example:
-    *    Read inputs 0..3, update outputs 0..3.
-    *    Blink output 4
-    */
-
-   /* variables to store input/output status */
- //  uint8_t inputs = 0, outputs = 0;
-
-   /* read inputs */
-   //ciaaPOSIX_read(fd_in, &inputs, 1);
-
-   /* read outputs */
-  // ciaaPOSIX_read(fd_out, &outputs, 1);
-
-   /* update outputs with inputs */
-  // outputs &= 0xF0;
-   //outputs |= inputs & 0x0F;
-
-   /* blink */
-  // outputs ^= 0x10;
-
-   /* write */
-   //ciaaPOSIX_write(fd_out, &outputs, 1);
-
-   /* end PeriodicTask */
-   TerminateTask();
 }
 
 /** @} doxygen end group definition */
