@@ -89,7 +89,7 @@
  *
  * Device path /dev/dio/out/0
  */
-static int32_t fd_out;
+//static int32_t fd_out;
 
 /** \brief File descriptor of the USB uart
  *
@@ -154,19 +154,18 @@ void ErrorHook(void)
    ShutdownOS(0);
 }
 
-
-
 /** \brief Initial task
  *
  * This task is started automatically in the application mode 1.
  */
 TASK(InitTask)
 {
-
 	/* init CIAA kernel and devices */
 	   ciaak_start();
 
 	   ciaaPOSIX_printf("Init Task...\n");
+
+	   /* init Poncho bluetooth-RN4020 */
 	   rn4020_init();
 
 	   /* open CIAA digital outputs */
@@ -192,54 +191,55 @@ TASK(InitTask)
 	   //ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
 	   //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
 
-	   /* Activates the SerialEchoTask task */
+	   /* Activates the SerialEchoTask tasks */
 	   ActivateTask(SerialEchoTaskUno);
 	   ActivateTask(SerialEchoTaskDos);
 
 	   /* end InitTask */
 	   TerminateTask();
 }
+
+/*
+ * SerialEchoTaskUno
+ *
+ * Envia los comandos iniciales al RN4020.
+ * Recibe caracteres desde la USB UART y los envia
+ * al RN4020.
+ */
 TASK(SerialEchoTaskUno)
 {
    int8_t buf[20];   /* buffer for uart operation              */
-   //uint8_t outputs;  /* to store outputs status                */
    int32_t ret;      /* return value variable for posix calls  */
    char c;
 
-   ciaaPOSIX_printf("SerialEchoTask...\n");
    /* send a message to the world :) */
    char message[] = "\n\rIniciañdo RN-4020\n\r";
    ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
-/*
-   ciaaPOSIX_write(fd_uart2, "+\n", 2);
-   ciaaPOSIX_write(fd_uart2, "SF,1\n", 5);
-   ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12);
-   ciaaPOSIX_write(fd_uart2, "SR,00000000\n", 12);
-   ciaaPOSIX_write(fd_uart2, "R,1\n", 4);
-   ciaaPOSIX_write(fd_uart2, "A\n", 2);
-   ciaaPOSIX_write(fd_uart2, "|O,07,05\n", 9);*/
 
-   c = 0x2B; // +
-   ciaaPOSIX_write(fd_uart2, &c, 1);
-   c = 0x0A; // LF
-   ciaaPOSIX_write(fd_uart2, &c, 1);
+   ciaaPOSIX_write(fd_uart2, "+\n", 2);	// ECHO
+   //ciaaPOSIX_write(fd_uart2, "SF,1\n", 5); // Set factory default config.
+   //ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12); // Allow some services
+   //ciaaPOSIX_write(fd_uart2, "SR,00000000\n", 12); // Config. module as peripheral
+   //ciaaPOSIX_write(fd_uart2, "R,1\n", 4); // Reset module
+   //ciaaPOSIX_write(fd_uart2, "A\n", 2); // Start Advertisting
+   //ciaaPOSIX_write(fd_uart2, "|O,07,05\n", 9); // Turn on some LEDs
 
    while(1)
    {
-      /* wait for any character ... */
       ret = ciaaPOSIX_read(fd_uart1, buf, 20);
-
       if(ret > 0)
       {
-
-         /* also write them to the other device */
          ciaaPOSIX_write(fd_uart2, buf, ret);
-
       }
-
    }
 }
 
+/*
+ * SerialEchoTaskDos
+ *
+ * Recibe caracteres desde el RN4020 y los envia
+ * a la UART USB.
+ */
 TASK(SerialEchoTaskDos)
 {
    int8_t buf[20];   /* buffer for uart operation              */
@@ -250,17 +250,11 @@ TASK(SerialEchoTaskDos)
 
    while(1)
    {
-
       ret = ciaaPOSIX_read(fd_uart2, buf, 20);
-
       if(ret > 0)
       {
-         /* ... and write them to the same device */
          ciaaPOSIX_write(fd_uart1, buf, ret);
-
-
       }
-
    }
 }
 

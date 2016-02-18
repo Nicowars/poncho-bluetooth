@@ -8,9 +8,7 @@
 #include "chip.h"
 
 void rn4020_init(void){
-
-	/*
-	CTS (14) OUTPUT (GPIO5)
+	/* CTS (14) OUTPUT (GPIO5)
 	pinNamePort = 6;
 	pinNamePin  = 9;
 	func        = FUNC0;
@@ -19,8 +17,7 @@ void rn4020_init(void){
 	Chip_SCU_PinMux(6, 9, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, FUNC0);
 	Chip_GPIO_SetPinDIR(LPC_GPIO_PORT, 3, 5, TRUE);
 
-	/*
-	RTS (18) INPUT (GPIO8)
+	/* RTS (18) INPUT (GPIO8)
 	pinNamePort = 6;
 	pinNamePin  = 12;
 	func        = FUNC0;
@@ -30,8 +27,7 @@ void rn4020_init(void){
 	Chip_SCU_PinMux(6, 12, SCU_MODE_PULLDOWN | SCU_MODE_INBUFF_EN | SCU_MODE_ZIF_DIS, FUNC0);
 	Chip_GPIO_SetPinDIR(LPC_GPIO_PORT, 2, 8, FALSE);
 
-	/*
-	CMD (8) OUTPUT (GPIO3)
+	/* CMD (8) OUTPUT (GPIO3)
 	pinNamePort = 6;
 	pinNamePin  = 7;
 	func        = FUNC4;
@@ -40,8 +36,7 @@ void rn4020_init(void){
 	Chip_SCU_PinMux(6, 7, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, FUNC4);
 	Chip_GPIO_SetPinDIR(LPC_GPIO_PORT, 5, 15, TRUE);
 
-	/*
-	WAKE_HW (15) OUTPUT (GPIO7)
+	/* WAKE_HW (15) OUTPUT (GPIO7)
 	pinNamePort = 6;
 	pinNamePin  = 11;
 	func        = FUNC0;
@@ -50,8 +45,7 @@ void rn4020_init(void){
 	Chip_SCU_PinMux(6, 11, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, FUNC0);
 	Chip_GPIO_SetPinDIR(LPC_GPIO_PORT, 3, 7, TRUE);
 
-	/*
-	WAKE_SW (7) OUTPUT (GPIO1)
+	/* WAKE_SW (7) OUTPUT (GPIO1)
 	pinNamePort = 6;
 	pinNamePin  = 4;
 	func        = FUNC0;
@@ -67,14 +61,13 @@ void rn4020_init(void){
 	   value     = 1; */
 	Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 3, 1);
 
-	// CTS
-	Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 5, 0);
+	// Set CTS
+	Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 5, 1);
 
-	// WAKE_HW
+	// Set WAKE_HW
 	Chip_GPIO_SetPinState( LPC_GPIO_PORT, 3, 7, 0);
 
-	// CMD
+	// Set CMD
 	Chip_GPIO_SetPinState( LPC_GPIO_PORT, 5, 15, 0);
-
 
 }
