@@ -183,18 +183,27 @@ static void ciaa_lpc4337_gpio_init(void)
 
    Chip_GPIO_SetDir(LPC_GPIO_PORT, 2,(1<<8),0);
 
-   /* LED */
+   /* LEDs */
    Chip_SCU_PinMux(2,0,MD_PUP|MD_EZI,FUNC4);  /* GPIO5[0], LED0R */
+   Chip_SCU_PinMux(2,1,MD_PUP|MD_EZI,FUNC4);  /* GPIO5[1], LED0G */
+   Chip_SCU_PinMux(2,2,MD_PUP|MD_EZI,FUNC4);  /* GPIO5[2], LED0B */
+   Chip_SCU_PinMux(2,10,MD_PUP|MD_EZI,FUNC0); /* GPIO0[14], LED1 */
+   Chip_SCU_PinMux(2,11,MD_PUP|MD_EZI,FUNC0); /* GPIO1[11], LED2 */
+   Chip_SCU_PinMux(2,12,MD_PUP|MD_EZI,FUNC0); /* GPIO1[12], LED3 */
 
-   Chip_GPIO_SetDir(LPC_GPIO_PORT, 5,(1<<0),1);
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, 5,(1<<0)|(1<<1)|(1<<2),1);
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, 0,(1<<14),1);
+   Chip_GPIO_SetDir(LPC_GPIO_PORT, 1,(1<<11)|(1<<12),1);
 
-   Chip_GPIO_ClearValue(LPC_GPIO_PORT, 5,(1<<0));
+   Chip_GPIO_ClearValue(LPC_GPIO_PORT, 5,(1<<0)|(1<<1)|(1<<2));
+   Chip_GPIO_ClearValue(LPC_GPIO_PORT, 0,(1<<14));
+   Chip_GPIO_ClearValue(LPC_GPIO_PORT, 1,(1<<11)|(1<<12));
 
    /* PONCHO: gpiO */
-   Chip_SCU_PinMux(6,4,MD_PUP|MD_EZI,FUNC0);  /* GPIO3[3], GPIO1 = WAKE_SW */
-   Chip_SCU_PinMux(6,9,MD_PUP|MD_EZI,FUNC0);  /* GPIO3[5], GPIO5 = RTS */
-   Chip_SCU_PinMux(6,11,MD_PUP|MD_EZI,FUNC0);  /* GPIO3[7], GPIO7 = WAKE_HW */
-   Chip_SCU_PinMux(6,7,MD_PUP|MD_EZI,FUNC0);  /* GPIO5[15], GPIO3 = CMD */
+   Chip_SCU_PinMux(6,4,MD_PUP|MD_EZI,FUNC0);	/* GPIO3[3], GPIO1 = WAKE_SW */
+   Chip_SCU_PinMux(6,9,MD_PUP|MD_EZI,FUNC0);	/* GPIO3[5], GPIO5 = RTS */
+   Chip_SCU_PinMux(6,11,MD_PUP|MD_EZI,FUNC0);	/* GPIO3[7], GPIO7 = WAKE_HW */
+   Chip_SCU_PinMux(6,7,MD_PUP|MD_EZI,FUNC0);	/* GPIO5[15], GPIO3 = CMD */
 
    Chip_GPIO_SetDir(LPC_GPIO_PORT, 3,(1<<3)|(1<<5)|(1<<7),1);
    Chip_GPIO_SetDir(LPC_GPIO_PORT, 5,(1<<15),1);
