@@ -67,13 +67,11 @@
  */
 
 /*==================[inclusions]=============================================*/
-//#include "chip.h"
 #include "os.h"               /* <= operating system header */
 #include "ciaaPOSIX_stdio.h"  /* <= device handler header */
 #include "ciaaPOSIX_string.h" /* <= string header */
 #include "ciaak.h"            /* <= ciaa kernel header */
 
-#include "rn4020.h"
 #include "bluetooth-rn4020.h"         /* <= own header */
 
 
@@ -89,7 +87,7 @@
  *
  * Device path /dev/dio/out/0
  */
-//static int32_t fd_out;
+static int32_t fd_out;
 
 /** \brief File descriptor of the USB uart
  *
@@ -160,13 +158,12 @@ void ErrorHook(void)
  */
 TASK(InitTask)
 {
+	uint8_t outputs;
+
 	/* init CIAA kernel and devices */
 	   ciaak_start();
 
 	   ciaaPOSIX_printf("Init Task...\n");
-
-	   /* init Poncho bluetooth-RN4020 */
-	   rn4020_init();
 
 	   /* open CIAA digital outputs */
 	   fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
@@ -177,19 +174,14 @@ TASK(InitTask)
 	   /* open UART connected to RS232 connector */
 	   fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
 
-	   /* change baud rate for uart usb */
-	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_BAUDRATE, (void *)ciaaBAUDRATE_115200);
-
-	   /* change baud rate for uart rs232 */
-	   ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_BAUDRATE, (void *)ciaaBAUDRATE_115200);
-
-	   /* change FIFO TRIGGER LEVEL for uart usb */
 	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
-
-	   ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
-
+	   //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
 	   //ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
 	   //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
+
+	   /* WAKE_SW = 1 */
+	   outputs = 0x02;
+	   ciaaPOSIX_write(fd_out, &outputs, 1);
 
 	   /* Activates the SerialEchoTask tasks */
 	   ActivateTask(SerialEchoTaskUno);

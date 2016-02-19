@@ -80,7 +80,7 @@ const ciaaDriverDio_dioType ciaaDriverDio_Inputs[] = { {2,0},{2,1},{2,2},{2,3},{
 const ciaaDriverDio_dioType ciaaDriverDio_Outputs[] =  { {5,1},{2,6},{2,5},{2,4},{5,12},{5,13},{5,14},{1,8} };
 #elif (edu_ciaa_nxp == BOARD)
 const ciaaDriverDio_dioType ciaaDriverDio_Inputs[] = { {0,4},{0,8},{0,9},{1,9}, {2,8} };
-const ciaaDriverDio_dioType ciaaDriverDio_Outputs[] =  { {5,0}, {3,3},{3,5},{3,7},{5,15} };
+const ciaaDriverDio_dioType ciaaDriverDio_Outputs[] =  { {5,0}, {0,14},{1,11},{1,12}, {3,3},{3,5},{3,7},{5,15} };
 #endif
 
 /** \brief Device for DIO 0 */
