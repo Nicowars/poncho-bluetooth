@@ -8,10 +8,10 @@
 #ifndef RN4020_H_
 #define RN4020_H_
 
-#define SWITCH1     0x01
-#define SWITCH2     0x02
-#define SWITCH3     0x04
-#define SWITCH4     0x08
+#define SWITCH1_MASK     0x01
+#define SWITCH2_MASK     0x02
+#define SWITCH3_MASK     0x04
+#define SWITCH4_MASK     0x08
 #define RN4020_CTS_MASK		0x10
 
 #define LED0R_MASK		0x01

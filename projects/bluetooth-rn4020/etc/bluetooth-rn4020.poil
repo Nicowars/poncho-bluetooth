@@ -89,6 +89,26 @@ TASK SerialEchoTaskDos {
     RESOURCE = POSIXR;
 }
 
+TASK PeriodicTask {
+    PRIORITY = 10;
+    ACTIVATION = 1;
+    STACK = 512;
+    TYPE = EXTENDED;
+    SCHEDULE = FULL;
+    RESOURCE = POSIXR;
+    EVENT = POSIXE;
+    AUTOSATART = TRUE {
+        APPMODE = AppMode1;
+    }
+}
+
+ALARM ActivatePeriodicTask {
+    COUNTER = SoftwareCounter;
+    ACTION = ACTIVATETASK {
+        TASK = PeriodicTask;
+    }
+}
+
 RESOURCE = POSIXR;
 
 EVENT = POSIXE;

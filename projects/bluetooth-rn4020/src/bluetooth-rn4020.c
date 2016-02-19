@@ -73,6 +73,7 @@
 #include "ciaak.h"            /* <= ciaa kernel header */
 
 #include "bluetooth-rn4020.h"         /* <= own header */
+#include "rn4020.h"
 
 
 /*==================[macros and definitions]=================================*/
@@ -88,6 +89,8 @@
  * Device path /dev/dio/out/0
  */
 static int32_t fd_out;
+static int32_t fd_in;
+static int8_t estado[2];
 
 /** \brief File descriptor of the USB uart
  *
@@ -168,6 +171,12 @@ TASK(InitTask)
 	   /* open CIAA digital outputs */
 	   fd_out = ciaaPOSIX_open("/dev/dio/out/0", ciaaPOSIX_O_RDWR);
 
+	   /* open CIAA digital inputs */
+	   fd_in = ciaaPOSIX_open("/dev/dio/in/0", ciaaPOSIX_O_RDONLY);
+
+	   outputs = RN4020_WAKE_SW_MASK+RN4020_WAKE_HW_MASK;
+	   ciaaPOSIX_write(fd_out, &outputs, 1);
+
 	   /* open UART connected to USB bridge (FT2232) */
 	   fd_uart1 = ciaaPOSIX_open("/dev/serial/uart/1", ciaaPOSIX_O_RDWR);
 
@@ -180,12 +189,15 @@ TASK(InitTask)
 	   //ciaaPOSIX_ioctl(fd_uart2, ciaaPOSIX_IOCTL_SET_NONBLOCK_MODE, (void*) 0);
 
 	   /* WAKE_SW = 1 */
-	   outputs = 0x02;
-	   ciaaPOSIX_write(fd_out, &outputs, 1);
+	   //outputs = 0x02;
+	   //ciaaPOSIX_write(fd_out, &outputs, 1);
 
 	   /* Activates the SerialEchoTask tasks */
+
+	   SetRelAlarm(ActivatePeriodicTask, 350, 250);
 	   ActivateTask(SerialEchoTaskUno);
 	   ActivateTask(SerialEchoTaskDos);
+
 
 	   /* end InitTask */
 	   TerminateTask();
@@ -202,17 +214,17 @@ TASK(SerialEchoTaskUno)
 {
    int8_t buf[20];   /* buffer for uart operation              */
    int32_t ret;      /* return value variable for posix calls  */
-   char c;
+   //char c;
 
    /* send a message to the world :) */
    char message[] = "\n\rIniciañdo RN-4020\n\r";
    ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
 
    ciaaPOSIX_write(fd_uart2, "+\n", 2);	// ECHO
-   //ciaaPOSIX_write(fd_uart2, "SF,1\n", 5); // Set factory default config.
-   //ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12); // Allow some services
-   //ciaaPOSIX_write(fd_uart2, "SR,00000000\n", 12); // Config. module as peripheral
-   //ciaaPOSIX_write(fd_uart2, "R,1\n", 4); // Reset module
+   ciaaPOSIX_write(fd_uart2, "SF,1\n", 5); // Set factory default config.
+   ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12); // Allow some services
+   ciaaPOSIX_write(fd_uart2, "SR,10000000\n", 12); // Config. module as peripheral
+   ciaaPOSIX_write(fd_uart2, "R,1\n", 4); // Reset module
    //ciaaPOSIX_write(fd_uart2, "A\n", 2); // Start Advertisting
    //ciaaPOSIX_write(fd_uart2, "|O,07,05\n", 9); // Turn on some LEDs
 
@@ -248,6 +260,37 @@ TASK(SerialEchoTaskDos)
          ciaaPOSIX_write(fd_uart1, buf, ret);
       }
    }
+}
+
+TASK(PeriodicTask)
+{
+   uint8_t outputs;
+   uint8_t inputs;
+
+   /* blink output */
+
+   ciaaPOSIX_read(fd_in, &inputs, 1);
+
+   if (((inputs&SWITCH1_MASK)==0)&& (estado[0]==0)){
+	   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+	     outputs ^= LED0R_MASK+RN4020_CMD_MASK;//RN4020_WAKE_SW_MASK+RN4020_WAKE_HW_MASK;
+	     ciaaPOSIX_write(fd_out, &outputs, 1);
+	     estado[0]=1;
+   }
+   else
+	   estado[0]=!(inputs&SWITCH1_MASK);
+
+   if (((inputs&SWITCH2_MASK)==0)&& (estado[1]==0)){
+	   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+	     outputs ^= (RN4020_WAKE_SW_MASK+LED1_MASK);
+	     ciaaPOSIX_write(fd_out, &outputs, 1);
+	     estado[1]=1;
+   }
+   else
+	   estado[1]=!(inputs&SWITCH2_MASK);
+
+   /* terminate task */
+   TerminateTask();
 }
 
 /** @} doxygen end group definition */
