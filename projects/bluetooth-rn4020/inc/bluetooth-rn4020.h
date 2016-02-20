@@ -33,8 +33,8 @@
  *
  */
 
-#ifndef _BLUETOOTH-RN4020_H_
-#define _BLUETOOTH-RN4020_H_
+#ifndef BLUETOOTH-RN4020_H_
+#define BLUETOOTH-RN4020_H_
 /** \brief Blinking example header file
  **
  ** This is a mini example of the CIAA Firmware
@@ -63,6 +63,12 @@
 /*==================[inclusions]=============================================*/
 
 /*==================[macros]=================================================*/
+
+#define RN4020_WAKE_SW_MASK	0x10
+#define RN4020_RTS_MASK		0x20
+#define RN4020_WAKE_HW_MASK	0x40
+#define RN4020_CMD_MASK		0x80
+#define RN4020_CTS_MASK		0x10
 
 /*==================[typedef]================================================*/
 
