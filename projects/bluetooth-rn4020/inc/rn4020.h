@@ -73,7 +73,6 @@
 #define RN4020_SERV_BATT            0x40000000
 /* End of definitions */
 
-
 void rn4020_init( void );
 
 void RN4020_SetServices ( int32_t );
@@ -86,9 +85,8 @@ void rn4020_factory( void );
 
 void rn4020_reset( void );
 
-ssize_t rn4020_read( void const * , size_t );
+ssize_t rn4020_read( void * , size_t );
 
-void rn4020_write( void * , size_t );
-
+void rn4020_write( void const * , size_t );
 
 #endif /* RN4020_H_ */
