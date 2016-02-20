@@ -316,9 +316,9 @@ Text GLabel 3950 2800 2    60   Input ~ 0
 TX
 Text GLabel 3950 2600 2    60   Input ~ 0
 RX
-Text GLabel 5000 2650 0    60   Input ~ 0
-TX
 Text GLabel 5000 2800 0    60   Input ~ 0
+TX
+Text GLabel 5000 2650 0    60   Input ~ 0
 RX
 Wire Wire Line
 	3850 2750 3900 2750

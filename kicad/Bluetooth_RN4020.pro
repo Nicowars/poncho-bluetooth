@@ -1,4 +1,4 @@
-update=05/11/2015 12:24:39 p.m.
+update=19/2/2016 21:37:51
 version=1
 last_client=kicad
 [pcbnew]
@@ -39,8 +39,6 @@ LibName15=pga_sockets
 LibName16=valves
 LibName17=RN4020
 LibDir=libBluetooth_RN4020
-[general]
-version=1
 [cvpcb]
 version=1
 NetIExt=net
@@ -82,3 +80,5 @@ LibName29=valves
 LibName30=RN4020
 LibName31=libModelos/Misc_Poncho_Grande
 LibName32=libPonchos/Poncho_Esqueleto
+[general]
+version=1
