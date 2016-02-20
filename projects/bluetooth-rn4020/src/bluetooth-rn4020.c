@@ -118,7 +118,6 @@ static int32_t fd_uart1;
  *
  * Device path /dev/serial/uart/2
  */
-static int32_t fd_uart2;
 
 
 /*==================[external data definition]===============================*/
@@ -197,7 +196,7 @@ TASK(InitTask)
 	   fd_uart1 = ciaaPOSIX_open("/dev/serial/uart/1", ciaaPOSIX_O_RDWR);
 
 	   /* open UART connected to RS232 connector */
-	   fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
+	   rn4020_init();
 
 	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
 
@@ -229,18 +228,18 @@ TASK(SerialEchoTaskUno)
    ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
 
    /* RN4020 config. */
-   ciaaPOSIX_write(fd_uart2, "+\n", 2);	// ECHO
-   ciaaPOSIX_write(fd_uart2, "SF,1\n", 5); // Set factory default config.
-   ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12); // Allow some services: Device Information, Battery
-   ciaaPOSIX_write(fd_uart2, "SR,38000800\n", 12); // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
-   ciaaPOSIX_write(fd_uart2, "R,1\n", 4); // Reset module
+   rn4020_echo();	// ECHO
+   rn4020_factory(); // Set factory default config.
+   rn4020_write("SS,C0000000\n", 12); // Allow some services: Device Information, Battery
+   rn4020_write("SR,38000800\n", 12); // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
+   rn4020_reset(); // Reset module
 
    while(1)
    {
       ret = ciaaPOSIX_read(fd_uart1, buf, 20);
       if(ret > 0)
       {
-         ciaaPOSIX_write(fd_uart2, buf, ret);
+    	  rn4020_write(buf,ret);
       }
    }
 }
@@ -262,7 +261,7 @@ TASK(SerialEchoTaskDos)
 
    while(1)
    {
-      ret = ciaaPOSIX_read(fd_uart2, buf, 20);
+      ret = rn4020_read(buf,20);
       if (ret > 0)
       {
          ciaaPOSIX_write(fd_uart1, buf, ret);
