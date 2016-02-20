@@ -75,9 +75,9 @@
 
 void rn4020_Init( void );
 
-void RN4020_SetServices ( int32_t );
+void RN4020_SetServices ( uint32_t );
 
-void RN4020_SetFeatures ( int32_t );
+void RN4020_SetFeatures ( uint32_t );
 
 void rn4020_ToggleEcho( void );
 

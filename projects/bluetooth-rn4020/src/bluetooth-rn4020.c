@@ -100,7 +100,7 @@ int32_t fd_out;
  */
 int32_t fd_in;
 
-static int8_t estado[3];
+//static int8_t estado[3];
 
 //static int8_t com_flag = 0;
    
@@ -191,7 +191,7 @@ TASK(InitTask)
 	   fd_uart1 = ciaaPOSIX_open("/dev/serial/uart/1", ciaaPOSIX_O_RDWR);
 
 	   /* open UART connected to RS232 connector */
-	   rn4020_init();
+	   rn4020_Init();
 
 	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
 
@@ -232,7 +232,7 @@ TASK(SerialEchoTaskUno)
    RN4020_SetServices(RN4020_SERV_DEVINFO | RN4020_SERV_BATT); 
    
    // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
-   RN4020_SetFeatures(RN4020_FEAT_AADV | RN4020_FEAT_ENMDLP | RN4020_FEAT_AMLDPDIS | RN4020_FEAT_AENTMLDP );
+   RN4020_SetFeatures(RN4020_FEAT_AADV | RN4020_FEAT_ENMLDP | RN4020_FEAT_AMLDPDIS | RN4020_FEAT_AENTMLDP );
    
    /* Reboot module */
    rn4020_Reboot();
@@ -242,7 +242,7 @@ TASK(SerialEchoTaskUno)
       ret = ciaaPOSIX_read(fd_uart1, buf, 20);
       if(ret > 0)
       {
-    	  rn4020_write(buf,ret);
+    	  rn4020_Write(buf,ret);
       }
    }
 }
@@ -263,7 +263,7 @@ TASK(SerialEchoTaskDos)
 
    while(1)
    {
-      ret = rn4020_read(buf,20);
+      ret = rn4020_Read(buf,20);
       if (ret > 0)
       {
          ciaaPOSIX_write(fd_uart1, buf, ret);
