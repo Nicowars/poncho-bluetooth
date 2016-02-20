@@ -33,8 +33,8 @@
  *
  */
 
-#ifndef _BLINKING_H_
-#define _BLINKING_H_
+#ifndef _BLUETOOTH-RN4020_H_
+#define _BLUETOOTH-RN4020_H_
 /** \brief Blinking example header file
  **
  ** This is a mini example of the CIAA Firmware

@@ -32,11 +32,11 @@ void rn4020_reset(){
 	   ciaaPOSIX_write(fd_uart2, "R,1\n", 4); // Reset module
 }
 
-ssize_t rn4020_read(void const * buf, size_t nbyte){
+ssize_t rn4020_read(void * buf, size_t nbyte){
 	return ciaaPOSIX_read(fd_uart2, buf, 20);
 }
 
-void rn4020_write(void * buf, size_t nbyte){
+void rn4020_write(void const * buf, size_t nbyte){
 	 ciaaPOSIX_write(fd_uart2, buf, nbyte);
 }
 

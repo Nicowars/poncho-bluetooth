@@ -8,19 +8,18 @@
 #ifndef RN4020_H_
 #define RN4020_H_
 
-#define SWITCH1_MASK     0x01
-#define SWITCH2_MASK     0x02
-#define SWITCH3_MASK     0x04
-#define SWITCH4_MASK     0x08
-#define RN4020_CTS_MASK		0x10
 
-#define LED0R_MASK		0x01
-#define LED1_MASK       0x02
-#define LED2_MASK       0x04
-#define LED3_MASK       0x08
-#define RN4020_WAKE_SW_MASK	0x10
-#define RN4020_RTS_MASK		0x20
-#define RN4020_WAKE_HW_MASK	0x40
-#define RN4020_CMD_MASK		0x80
+
+void rn4020_init();
+
+void rn4020_echo();
+
+void rn4020_factory();
+
+void rn4020_reset();
+
+ssize_t rn4020_read(void *, size_t);
+
+void rn4020_write(void const *, size_t);
 
 #endif /* RN4020_H_ */
