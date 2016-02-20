@@ -102,7 +102,7 @@ static int32_t fd_in;
 
 static int8_t estado[3];
 
-static int8_t com[20];  /* buffer for store command */
+static char com[20];  /* buffer for store command */
 
 static int8_t com_i = 0;    /* index for buffer com */
    
@@ -278,43 +278,43 @@ TASK(SerialEchoTaskDos)
             }
             
             /* COMANDO FINALIZADO? */
-            if (com[com_i] == '\n')
+            if (com[com_i-1] == '\n')
             {
                 com_i = 0;
                 
                 /* LED ON? */
-                if (ciaaPOSIX_strncmp(com, ON_LED, ciaaPOSIX_strlen(ON_LED)))
+                if (!ciaaPOSIX_strncmp(com, ON_LED, ciaaPOSIX_strlen(ON_LED)))
                     switch (com[ciaaPOSIX_strlen(ON_LED)]){
-                        case 1:
+                        case '1':
                             ciaaPOSIX_read(fd_out, &i, 1);
                             i|= LED1_MASK;
                             ciaaPOSIX_write(fd_out, &i, 1);
                             break;
-                        case 2:
+                        case '2':
                             ciaaPOSIX_read(fd_out, &i, 1);
                             i|= LED2_MASK;
                             ciaaPOSIX_write(fd_out, &i, 1);
                             break;
-                        case 3:
+                        case '3':
                             ciaaPOSIX_read(fd_out, &i, 1);
                             i|= LED3_MASK;
                             ciaaPOSIX_write(fd_out, &i, 1);
                     }
                     
                 /* LED OFF? */
-                if (ciaaPOSIX_strncmp(com, OFF_LED, ciaaPOSIX_strlen(OFF_LED)))
+                if (!ciaaPOSIX_strncmp(com, OFF_LED, ciaaPOSIX_strlen(OFF_LED)))
                     switch (com[ciaaPOSIX_strlen(OFF_LED)]){
-                        case 1:
+                        case '1':
                             ciaaPOSIX_read(fd_out, &i, 1);
                             i&= ~LED1_MASK;
                             ciaaPOSIX_write(fd_out, &i, 1);
                             break;
-                        case 2:
+                        case '2':
                             ciaaPOSIX_read(fd_out, &i, 1);
                             i&= ~LED2_MASK;
                             ciaaPOSIX_write(fd_out, &i, 1);
                             break;
-                        case 3:
+                        case '3':
                             ciaaPOSIX_read(fd_out, &i, 1);
                             i&= ~LED3_MASK;
                             ciaaPOSIX_write(fd_out, &i, 1);
@@ -360,7 +360,7 @@ TASK(PeriodicTask)
 
    if (((inputs&SWITCH3_MASK)==0)&& (estado[2]==0)){
 	   	 ciaaPOSIX_read(fd_out, &outputs, 1);
-	     outputs ^= (RN4020_WAKE_HW_MASK/*|LED3_MASK*/);
+	     outputs ^= (RN4020_WAKE_HW_MASK|LED0R_MASK);
 	     ciaaPOSIX_write(fd_out, &outputs, 1);
 	     estado[2]=1;
    }
