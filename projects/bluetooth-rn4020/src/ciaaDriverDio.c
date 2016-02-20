@@ -203,7 +203,7 @@ static void ciaa_lpc4337_gpio_init(void)
    Chip_SCU_PinMux(6,4,MD_PUP|MD_EZI,FUNC0);	/* GPIO3[3], GPIO1 = WAKE_SW */
    Chip_SCU_PinMux(6,9,MD_PUP|MD_EZI,FUNC0);	/* GPIO3[5], GPIO5 = RTS */
    Chip_SCU_PinMux(6,11,MD_PUP|MD_EZI,FUNC0);	/* GPIO3[7], GPIO7 = WAKE_HW */
-   Chip_SCU_PinMux(6,7,MD_PUP|MD_EZI,FUNC0);	/* GPIO5[15], GPIO3 = CMD */
+   Chip_SCU_PinMux(6,7,MD_PUP|MD_EZI,FUNC4);	/* GPIO5[15], GPIO3 = CMD */
 
    Chip_GPIO_SetDir(LPC_GPIO_PORT, 3,(1<<3)|(1<<5)|(1<<7),1);
    Chip_GPIO_SetDir(LPC_GPIO_PORT, 5,(1<<15),1);

@@ -90,7 +90,7 @@
  */
 static int32_t fd_out;
 static int32_t fd_in;
-static int8_t estado[2];
+static int8_t estado[3];
 
 /** \brief File descriptor of the USB uart
  *
@@ -221,9 +221,9 @@ TASK(SerialEchoTaskUno)
    ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
 
    ciaaPOSIX_write(fd_uart2, "+\n", 2);	// ECHO
-   ciaaPOSIX_write(fd_uart2, "SF,1\n", 5); // Set factory default config.
+   ciaaPOSIX_write(fd_uart2, "SF,2\n", 5); // Set factory default config.
    ciaaPOSIX_write(fd_uart2, "SS,C0000000\n", 12); // Allow some services
-   ciaaPOSIX_write(fd_uart2, "SR,10000000\n", 12); // Config. module as peripheral
+   ciaaPOSIX_write(fd_uart2, "SR,38000800\n", 12); // Config. module as peripheral
    ciaaPOSIX_write(fd_uart2, "R,1\n", 4); // Reset module
    //ciaaPOSIX_write(fd_uart2, "A\n", 2); // Start Advertisting
    //ciaaPOSIX_write(fd_uart2, "|O,07,05\n", 9); // Turn on some LEDs
@@ -273,21 +273,32 @@ TASK(PeriodicTask)
 
    if (((inputs&SWITCH1_MASK)==0)&& (estado[0]==0)){
 	   	 ciaaPOSIX_read(fd_out, &outputs, 1);
-	     outputs ^= LED0R_MASK+RN4020_CMD_MASK;//RN4020_WAKE_SW_MASK+RN4020_WAKE_HW_MASK;
+	     outputs ^= LED1_MASK+RN4020_CMD_MASK;
 	     ciaaPOSIX_write(fd_out, &outputs, 1);
 	     estado[0]=1;
    }
    else
 	   estado[0]=!(inputs&SWITCH1_MASK);
 
+
    if (((inputs&SWITCH2_MASK)==0)&& (estado[1]==0)){
 	   	 ciaaPOSIX_read(fd_out, &outputs, 1);
-	     outputs ^= (RN4020_WAKE_SW_MASK+LED1_MASK);
+	     outputs ^= (RN4020_WAKE_SW_MASK+LED2_MASK);
 	     ciaaPOSIX_write(fd_out, &outputs, 1);
 	     estado[1]=1;
    }
    else
 	   estado[1]=!(inputs&SWITCH2_MASK);
+
+
+   if (((inputs&SWITCH3_MASK)==0)&& (estado[2]==0)){
+	   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+	     outputs ^= (RN4020_WAKE_HW_MASK+LED3_MASK);
+	     ciaaPOSIX_write(fd_out, &outputs, 1);
+	     estado[2]=1;
+   }
+   else
+	   estado[2]=!(inputs&SWITCH3_MASK);
 
    /* terminate task */
    TerminateTask();
