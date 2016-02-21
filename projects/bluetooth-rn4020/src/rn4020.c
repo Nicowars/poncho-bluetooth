@@ -19,18 +19,18 @@ void rn4020_Init(){
 	fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
 }
 
-void RN4020_SetServices ( uint32_t op ){
+void RN4020_SetServices ( int32_t op ){
     char * str = "SS";
     char * hex;
-    //sprintf(hex, "%X", op);
+    sprintf(hex, "%x", op);
     ciaaPOSIX_strcat( str , hex );
     ciaaPOSIX_write(fd_uart2, str, 12);
 }
 
-void RN4020_SetFeatures ( uint32_t op ){
+void RN4020_SetFeatures ( int32_t op ){
     char * str = "SR";
     char * hex;
-    //sprintf(hex, "%X", op);
+    sprintf(hex, "%x", op);
     ciaaPOSIX_strcat( str , hex );
     ciaaPOSIX_write(fd_uart2, str, 12);
 }
