@@ -5,6 +5,7 @@
  *      Author: lawliet
  */
 #include "controlLED.h"
+
 static char com[20];  /* buffer for store command */
 
 static int8_t com_i = 0;    /* index for buffer com */

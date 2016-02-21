@@ -172,11 +172,11 @@ void inicializacion(void){
 	   ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
 
 	   /* RN4020 config. */
-	   rn4020_echo();	// ECHO
-	   rn4020_factory(); // Set factory default config.
-	   rn4020_write("SS,C0000000\n", 12); // Allow some services: Device Information, Battery
-	   rn4020_write("SR,38000800\n", 12); // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
-	   rn4020_reset(); // Reset module
+	   rn4020_ToggleEcho();	// ECHO
+	   rn4020_PartialFactory(); // Set factory default config.
+	   rn4020_Write("SS,C0000000\n", 12); // Allow some services: Device Information, Battery
+	   rn4020_Write("SR,38000800\n", 12); // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
+	   rn4020_Reboot(); // Reset module
 }
 
 /** \brief Initial task
@@ -202,7 +202,7 @@ TASK(InitTask)
 	   fd_uart1 = ciaaPOSIX_open("/dev/serial/uart/1", ciaaPOSIX_O_RDWR);
 
 	   /* open UART connected to RS232 connector */
-	   rn4020_init();
+	   rn4020_Init();
 
 	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
 	   inicializacion();
@@ -237,7 +237,7 @@ TASK(SerialRXTask)
       ret = ciaaPOSIX_read(fd_uart1, buf, 20);
       if(ret > 0)
       {
-    	  rn4020_write(buf,ret);
+    	  rn4020_Write(buf,ret);
       }
    }
 }
@@ -255,7 +255,7 @@ TASK(SerialTXTask)
 
    while(1)
    {
-      ret = rn4020_read(buf,20);
+      ret = rn4020_Read(buf,20);
       if (ret > 0)
       {
          ciaaPOSIX_write(fd_uart1, buf, ret);
