@@ -1,7 +1,6 @@
 /*
  * rn4020.h
  *
- *
  * Autores
  * ---------------------------
  * Gabriel Morgillo
@@ -27,10 +26,10 @@
 #define LED1_MASK       0x02
 #define LED2_MASK       0x04
 #define LED3_MASK       0x08
-#define RN4020_WAKE_SW_MASK	0x10
-#define RN4020_RTS_MASK		0x20
-#define RN4020_WAKE_HW_MASK	0x40
-#define RN4020_CMD_MASK		0x80
+#define RN4020_WAKE_SW_MASK	    0x10
+#define RN4020_RTS_MASK		    0x20
+#define RN4020_WAKE_HW_MASK	    0x40
+#define RN4020_CMD_MLDP_MASK	0x80
 /* End of definitions */
 
 /* Definitions of baud rate modifiers */
@@ -79,16 +78,47 @@
 #define RN4020_SERV_BATT            0x40000000
 /* End of definitions */
 
+/**
+ * Inicializa el módulo
+ * Abre una comunicacion por UART.
+ */
 void rn4020_Init( void );
 
+/**
+ * Cambia el estado (activado o desactivado) 
+ * del "eco" del modulo RN4020.
+ */
 void rn4020_ToggleEcho( void );
 
+/**
+ * Vuelve al modulo RN4020 a su configuracion 
+ * de fabrica.
+ */
 void rn4020_PartialFactory( void );
 
+/**
+ * Reinicia el modulo RN4020.
+ * Al reiniciarse se efectivizan los cambios 
+ * en la configuracion.
+ */
 void rn4020_Reboot( void );
 
+/**
+ * Lee una cantidad determinada de caracteres 
+ * desde el modulo RN4020.
+ * @param buf - Puntero al buffer destino.
+ * @param nbyte - Maxima cantidad de caracteres a leer.
+ * @return {ssize_t} - Cantidad de caracteres leidos.
+ */
 ssize_t rn4020_Read( void * , size_t );
 
+/**
+ * Envia una cantidad determinada de caracteres 
+ * al modulo RN4020.
+ * @param buf - Puntero a la cadena a copiar.
+ * @param nbyte - Cantidad de caracteres a copiar.
+ */
 void rn4020_Write( void const * , size_t );
+
 
 #endif /* RN4020_H_ */

@@ -1,8 +1,4 @@
-/* Copyright 2014, Mariano Cerdeiro
- * Copyright 2014, Pablo Ridolfi
- * Copyright 2014, Juan Cecconi
- * Copyright 2014, Gustavo Muro
- *
+/* 
  * Autores
  * ---------------------------
  * Gabriel Morgillo
@@ -12,9 +8,8 @@
  * Manuel Solito
  */
 
-#ifndef _BLUETOOTH-RN4020_H_
-#define _BLUETOOTH-RN4020_H_
+#ifndef BLUETOOTH-RN4020_H_
+#define BLUETOOTH-RN4020_H_
 
 /*==================[end of file]============================================*/
-#endif /* #ifndef _BLINKING_H_ */
-
+#endif 

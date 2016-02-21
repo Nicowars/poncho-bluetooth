@@ -178,7 +178,7 @@ TASK(InitTask)
 	   /*inicializa el modulo */
 	   inicializacion();
 
-	   /* Activates the SerialEchoTask tasks */
+	   /* Activates the tasks */
 	   SetRelAlarm(ActivateButtonsTask, 350, 250);
 	   ActivateTask(SerialRXTask);
 	   ActivateTask(SerialTXTask);
@@ -247,9 +247,9 @@ TASK(ButtonsTask)
 
 	   //si hubo un flanco descendente en el interruptor 1
 	   if (((inputs&SWITCH1_MASK)==0)&& (estado[0]==0)){
-		   //intercambia entre CMD y MLDP
+		   /* Conmuta el estado de CMD/MLDP */
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
-		     outputs ^= /*LED1_MASK|*/RN4020_CMD_MASK;
+		     outputs ^= /*LED1_MASK|*/RN4020_CMD_MLDP_MASK;
 		     ciaaPOSIX_write(fd_out, &outputs, 1);
 		     estado[0]=1;
 	   }
@@ -258,7 +258,8 @@ TASK(ButtonsTask)
 
 	   //si hubo un flanco descendente en el interruptor 2
 	   if (((inputs&SWITCH2_MASK)==0)&& (estado[1]==0)){
-		   //conmuta el valor de wake software
+		   
+           /* Conmuta el estado de WAKE_SW */
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
 		     outputs ^= (RN4020_WAKE_SW_MASK/*|LED2_MASK*/);
 		     ciaaPOSIX_write(fd_out, &outputs, 1);
@@ -269,7 +270,8 @@ TASK(ButtonsTask)
 
 	   //si hubo un flanco descendente en el interruptor 3
 	   if (((inputs&SWITCH3_MASK)==0)&& (estado[2]==0)){
-		   //conmuta el valor de wake hardware
+		   
+           /* Conmuta el estado de WAKE_HW */
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
 		     outputs ^= (RN4020_WAKE_HW_MASK|LED0R_MASK);
 		     ciaaPOSIX_write(fd_out, &outputs, 1);
