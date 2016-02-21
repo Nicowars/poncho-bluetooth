@@ -33,59 +33,31 @@
  *
  */
 
-/** \brief Blinking_echo example source file
- **
- ** This is a mini example of the CIAA Firmware.
- **
- **/
-
-/** \addtogroup CIAA_Firmware CIAA Firmware
- ** @{ */
-/** \addtogroup Examples CIAA Firmware Examples
- ** @{ */
-/** \addtogroup Blinking Blinking_echo example source file
- ** @{ */
-
 /*
- * Initials     Name
+ * Autores
  * ---------------------------
- * MaCe         Mariano Cerdeiro
- * PR           Pablo Ridolfi
- * JuCe         Juan Cecconi
- * GMuro        Gustavo Muro
- * ErPe         Eric Pernia
+ * Gabriel Morgillo
+ * Nicolás Laurella
+ * Alex Muriel
+ * Jaime Zubieta Battista
+ * Manuel Solito
  */
 
-/*
- * modification history (new versions first)
- * -----------------------------------------------------------
- * 20150603 v0.0.3   ErPe change uint8 type by uint8_t
- *                        in line 172
- * 20141019 v0.0.2   JuCe add printf in each task,
- *                        remove trailing spaces
- * 20140731 v0.0.1   PR   first functional version
- */
-
-/*==================[inclusions]=============================================*/
+/*==================[inclusions]==========================*/
 #include "os.h"               /* <= operating system header */
 #include "ciaaPOSIX_stdio.h"  /* <= device handler header */
 #include "ciaaPOSIX_string.h" /* <= string header */
 #include "ciaak.h"            /* <= ciaa kernel header */
 
 #include "bluetooth-rn4020.h"         /* <= own header */
-#include "rn4020.h"
-#include "controlLED.h"
+#include "rn4020.h"				/* Modulo Bluetooh header */
+#include "controlLED.h"			/* Interprete de comandos LED header */
 
 
 
 /*==================[macros and definitions]=================================*/
-
-
-
 /*==================[internal data declaration]==============================*/
-
 /*==================[internal functions declaration]=========================*/
-
 /*==================[internal data definition]===============================*/
 
 /** \brief File descriptor for digital output ports
@@ -100,9 +72,10 @@ int32_t fd_out;
  */
 int32_t fd_in;
 
+/*
+ * mantiene el estado de los pulsadores para que funcionen por flanco
+ */
 static int8_t estado[3];
-
-//static int8_t com_flag = 0;
    
 /** \brief File descriptor of the USB uart
  *
@@ -110,17 +83,10 @@ static int8_t estado[3];
  */
 static int32_t fd_uart1;
 
-/** \brief File descriptor of the RS232 uart
- *
- * Device path /dev/serial/uart/2
- */
-
-
 /*==================[external data definition]===============================*/
-
 /*==================[internal functions definition]==========================*/
-
 /*==================[external functions definition]==========================*/
+
 /** \brief Main function
  *
  * This is the main entry point of the software.
@@ -166,6 +132,10 @@ void ErrorHook(void)
    ShutdownOS(0);
 }
 
+/** Breve descripcion de la funcion inicializacion
+ * inicializa el modulo buetooth
+ * activa el modo echo
+ */
 void inicializacion(void){
 	   /* send a message to the world :) */
 	   char message[] = "\n\rIniciando RN-4020\n\r";
@@ -185,8 +155,6 @@ void inicializacion(void){
  */
 TASK(InitTask)
 {
-
-
 	/* init CIAA kernel and devices */
 	   ciaak_start();
 
@@ -204,22 +172,22 @@ TASK(InitTask)
 	   /* open UART connected to RS232 connector */
 	   rn4020_Init();
 
+	   /* configura la UART */
 	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
+
+	   /*inicializa el modulo */
 	   inicializacion();
 
 	   /* Activates the SerialEchoTask tasks */
-
 	   SetRelAlarm(ActivateButtonsTask, 350, 250);
 	   ActivateTask(SerialRXTask);
 	   ActivateTask(SerialTXTask);
-
 
 	   /* end InitTask */
 	   TerminateTask();
 }
 
-/*
- * SerialEchoTaskUno
+/* Breve descripcion de la funcion SerialRXTask
  *
  * Envia los comandos iniciales al RN4020.
  * Recibe caracteres desde la USB UART y los envia
@@ -230,20 +198,18 @@ TASK(SerialRXTask)
    int8_t buf[20];   /* buffer for uart operation              */
    int32_t ret;      /* return value variable for posix calls  */
 
-
-
-   while(1)
-   {
+   /* loop infinito */
+   while(1) {
+	   //lee de UART USB
       ret = ciaaPOSIX_read(fd_uart1, buf, 20);
-      if(ret > 0)
-      {
+      if(ret > 0) {
+    	  //envia los datos recibidos al modulo
     	  rn4020_Write(buf,ret);
       }
    }
 }
 
-/*
- * SerialEchoTaskDos
+/* Breve descripcion de la funcion SerialTXTask
  *
  * Recibe caracteres desde el RN4020 y los envia
  * a la UART USB.
@@ -253,27 +219,35 @@ TASK(SerialTXTask)
    int8_t buf[20];   /* buffer for uart operation              */
    int32_t ret;      /* return value variable for posix calls  */
 
+   /*loop infinito*/
    while(1)
    {
+	   //lee del modulo
       ret = rn4020_Read(buf,20);
       if (ret > 0)
       {
+    	  //escribe en UART USB
          ciaaPOSIX_write(fd_uart1, buf, ret);
+         //Comprueba si lo que se recibio es un camando del LED
          controlLED_interprete(buf,ret);
-                  
       }
-      
    }
 }
 
+/* Breve descripcion de la funcion ButtonsTask
+ *
+ */
 TASK(ButtonsTask)
 {
 	   uint8_t outputs;
 	   uint8_t inputs;
 
+	   //lee los pulsadores
 	   ciaaPOSIX_read(fd_in, &inputs, 1);
 
+	   //si hubo un flanco descendente en el interruptor 1
 	   if (((inputs&SWITCH1_MASK)==0)&& (estado[0]==0)){
+		   //intercambia entre CMD y MLDP
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
 		     outputs ^= /*LED1_MASK|*/RN4020_CMD_MASK;
 		     ciaaPOSIX_write(fd_out, &outputs, 1);
@@ -282,8 +256,9 @@ TASK(ButtonsTask)
 	   else
 		   estado[0]=!(inputs&SWITCH1_MASK);
 
-
+	   //si hubo un flanco descendente en el interruptor 2
 	   if (((inputs&SWITCH2_MASK)==0)&& (estado[1]==0)){
+		   //conmuta el valor de wake software
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
 		     outputs ^= (RN4020_WAKE_SW_MASK/*|LED2_MASK*/);
 		     ciaaPOSIX_write(fd_out, &outputs, 1);
@@ -292,8 +267,9 @@ TASK(ButtonsTask)
 	   else
 		   estado[1]=!(inputs&SWITCH2_MASK);
 
-
+	   //si hubo un flanco descendente en el interruptor 3
 	   if (((inputs&SWITCH3_MASK)==0)&& (estado[2]==0)){
+		   //conmuta el valor de wake hardware
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
 		     outputs ^= (RN4020_WAKE_HW_MASK|LED0R_MASK);
 		     ciaaPOSIX_write(fd_out, &outputs, 1);
@@ -307,7 +283,4 @@ TASK(ButtonsTask)
 }
 
 /** @} doxygen end group definition */
-/** @} doxygen end group definition */
-/** @} doxygen end group definition */
 /*==================[end of file]============================================*/
-

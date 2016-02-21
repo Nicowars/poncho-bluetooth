@@ -1,8 +1,14 @@
 /*
  * rn4020.h
  *
- *  Created on: 7/2/2016
- *      Author: jaime
+ *
+ * Autores
+ * ---------------------------
+ * Gabriel Morgillo
+ * Nicolás Laurella
+ * Alex Muriel
+ * Jaime Zubieta Battista
+ * Manuel Solito
  */
 
 #ifndef RN4020_H_

@@ -1,8 +1,14 @@
 /*
  * controlLED.h
  *
- *  Created on: 20/2/2016
- *      Author: lawliet
+ *
+ * Autores
+ * ---------------------------
+ * Gabriel Morgillo
+ * Nicolás Laurella
+ * Alex Muriel
+ * Jaime Zubieta Battista
+ * Manuel Solito
  */
 
 #ifndef PROJECTS_BLUETOOTH_RN4020_INC_CONTROLLED_H_

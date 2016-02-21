@@ -1,9 +1,16 @@
 /*
  * rn4020.c
  *
- *  Created on: 7/2/2016
- *      Author: jaime
+ * Autores
+ * ---------------------------
+ * Gabriel Morgillo
+ * Nicolás Laurella
+ * Alex Muriel
+ * Jaime Zubieta Battista
+ * Manuel Solito
  */
+
+/*==================[inclusions]==========================*/
 
 #include "ciaaPOSIX_stdio.h"
 #include "ciaaPOSIX_string.h"
@@ -11,9 +18,15 @@
 #include "ciaaPOSIX_assert.h"
 #include "rn4020.h"
 
+/*==================[internal data definition]===============================*/
+
 static int32_t fd_uart2;
 extern int32_t fd_out;
 
+/**
+ * Inicializa el módulo
+ * Abre una comunicacion por UART.
+ */
 void rn4020_Init(){
 	uint8_t outputs;
 	fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
