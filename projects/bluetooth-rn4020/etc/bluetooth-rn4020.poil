@@ -69,7 +69,7 @@ TASK InitTask {
     EVENT = POSIXE;
 }
 
-TASK SerialEchoTaskUno {
+TASK SerialRXTask {
     PRIORITY = 5;
     ACTIVATION = 1;
     STACK = 512;
@@ -79,7 +79,7 @@ TASK SerialEchoTaskUno {
     RESOURCE = POSIXR;
 }
 
-TASK SerialEchoTaskDos {
+TASK SerialTXTask {
     PRIORITY = 5;
     ACTIVATION = 1;
     STACK = 512;
@@ -89,7 +89,7 @@ TASK SerialEchoTaskDos {
     RESOURCE = POSIXR;
 }
 
-TASK PeriodicTask {
+TASK ButtonsTask {
     PRIORITY = 10;
     ACTIVATION = 1;
     STACK = 512;
@@ -102,10 +102,10 @@ TASK PeriodicTask {
     }
 }
 
-ALARM ActivatePeriodicTask {
+ALARM ActivateButtonsTask {
     COUNTER = SoftwareCounter;
     ACTION = ACTIVATETASK {
-        TASK = PeriodicTask;
+        TASK = ButtonsTask;
     }
 }
 

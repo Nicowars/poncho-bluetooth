@@ -166,13 +166,26 @@ void ErrorHook(void)
    ShutdownOS(0);
 }
 
+void inicializacion(void){
+	   /* send a message to the world :) */
+	   char message[] = "\n\rIniciando RN-4020\n\r";
+	   ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
+
+	   /* RN4020 config. */
+	   rn4020_echo();	// ECHO
+	   rn4020_factory(); // Set factory default config.
+	   rn4020_write("SS,C0000000\n", 12); // Allow some services: Device Information, Battery
+	   rn4020_write("SR,38000800\n", 12); // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
+	   rn4020_reset(); // Reset module
+}
+
 /** \brief Initial task
  *
  * This task is started automatically in the application mode 1.
  */
 TASK(InitTask)
 {
-	uint8_t outputs;
+
 
 	/* init CIAA kernel and devices */
 	   ciaak_start();
@@ -185,8 +198,6 @@ TASK(InitTask)
 	   /* open CIAA digital inputs */
 	   fd_in = ciaaPOSIX_open("/dev/dio/in/0", ciaaPOSIX_O_RDONLY);
 
-	   controlLED_init();
-
 	   /* open UART connected to USB bridge (FT2232) */
 	   fd_uart1 = ciaaPOSIX_open("/dev/serial/uart/1", ciaaPOSIX_O_RDWR);
 
@@ -194,12 +205,13 @@ TASK(InitTask)
 	   rn4020_init();
 
 	   ciaaPOSIX_ioctl(fd_uart1, ciaaPOSIX_IOCTL_SET_FIFO_TRIGGER_LEVEL, (void *)ciaaFIFO_TRIGGER_LEVEL3);
+	   inicializacion();
 
 	   /* Activates the SerialEchoTask tasks */
 
-	   SetRelAlarm(ActivatePeriodicTask, 350, 250);
-	   ActivateTask(SerialEchoTaskUno);
-	   ActivateTask(SerialEchoTaskDos);
+	   SetRelAlarm(ActivateButtonsTask, 350, 250);
+	   ActivateTask(SerialRXTask);
+	   ActivateTask(SerialTXTask);
 
 
 	   /* end InitTask */
@@ -213,21 +225,12 @@ TASK(InitTask)
  * Recibe caracteres desde la USB UART y los envia
  * al RN4020.
  */
-TASK(SerialEchoTaskUno)
+TASK(SerialRXTask)
 {
    int8_t buf[20];   /* buffer for uart operation              */
    int32_t ret;      /* return value variable for posix calls  */
 
-   /* send a message to the world :) */
-   char message[] = "\n\rIniciando RN-4020\n\r";
-   ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
 
-   /* RN4020 config. */
-   rn4020_echo();	// ECHO
-   rn4020_factory(); // Set factory default config.
-   rn4020_write("SS,C0000000\n", 12); // Allow some services: Device Information, Battery
-   rn4020_write("SR,38000800\n", 12); // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
-   rn4020_reset(); // Reset module
 
    while(1)
    {
@@ -245,13 +248,10 @@ TASK(SerialEchoTaskUno)
  * Recibe caracteres desde el RN4020 y los envia
  * a la UART USB.
  */
-TASK(SerialEchoTaskDos)
+TASK(SerialTXTask)
 {
    int8_t buf[20];   /* buffer for uart operation              */
    int32_t ret;      /* return value variable for posix calls  */
-
-   char message[] = "\n\rIniciando\n\r";
-   ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
 
    while(1)
    {
@@ -266,9 +266,41 @@ TASK(SerialEchoTaskDos)
    }
 }
 
-TASK(PeriodicTask)
+TASK(ButtonsTask)
 {
-   controlLED_actualizar();
+	   uint8_t outputs;
+	   uint8_t inputs;
+
+	   ciaaPOSIX_read(fd_in, &inputs, 1);
+
+	   if (((inputs&SWITCH1_MASK)==0)&& (estado[0]==0)){
+		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+		     outputs ^= /*LED1_MASK|*/RN4020_CMD_MASK;
+		     ciaaPOSIX_write(fd_out, &outputs, 1);
+		     estado[0]=1;
+	   }
+	   else
+		   estado[0]=!(inputs&SWITCH1_MASK);
+
+
+	   if (((inputs&SWITCH2_MASK)==0)&& (estado[1]==0)){
+		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+		     outputs ^= (RN4020_WAKE_SW_MASK/*|LED2_MASK*/);
+		     ciaaPOSIX_write(fd_out, &outputs, 1);
+		     estado[1]=1;
+	   }
+	   else
+		   estado[1]=!(inputs&SWITCH2_MASK);
+
+
+	   if (((inputs&SWITCH3_MASK)==0)&& (estado[2]==0)){
+		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+		     outputs ^= (RN4020_WAKE_HW_MASK|LED0R_MASK);
+		     ciaaPOSIX_write(fd_out, &outputs, 1);
+		     estado[2]=1;
+	   }
+	   else
+		   estado[2]=!(inputs&SWITCH3_MASK);
 
    /* terminate task */
    TerminateTask();
