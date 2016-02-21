@@ -222,20 +222,12 @@ TASK(SerialEchoTaskUno)
    char message[] = "\n\rIniciando RN-4020\n\r";
    ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
 
-   /* RN4020 config: Echo */
-   rn4020_ToggleEcho();
-   
-   // Set factory default config.
-   rn4020_PartialFactory(); 
-   
-   // Allow some services: Device Information, Battery
-   RN4020_SetServices(RN4020_SERV_DEVINFO | RN4020_SERV_BATT); 
-   
-   // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
-   RN4020_SetFeatures(RN4020_FEAT_AADV | RN4020_FEAT_ENMDLP | RN4020_FEAT_AMLDPDIS | RN4020_FEAT_AENTMLDP );
-   
-   /* Reboot module */
-   rn4020_Reboot();
+   /* RN4020 config. */
+   rn4020_echo();	// ECHO
+   rn4020_factory(); // Set factory default config.
+   rn4020_write("SS,C0000000\n", 12); // Allow some services: Device Information, Battery
+   rn4020_write("SR,38000800\n", 12); // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
+   rn4020_reset(); // Reset module
 
    while(1)
    {

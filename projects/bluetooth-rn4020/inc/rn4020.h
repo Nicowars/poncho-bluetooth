@@ -73,20 +73,20 @@
 #define RN4020_SERV_BATT            0x40000000
 /* End of definitions */
 
-void rn4020_Init( void );
+void rn4020_init( void );
 
 void RN4020_SetServices ( int32_t );
 
 void RN4020_SetFeatures ( int32_t );
 
-void rn4020_ToggleEcho( void );
+void rn4020_echo( void );
 
-void rn4020_PartialFactory( void );
+void rn4020_factory( void );
 
-void rn4020_Reboot( void );
+void rn4020_reset( void );
 
-ssize_t rn4020_Read( void * , size_t );
+ssize_t rn4020_read( void * , size_t );
 
-void rn4020_Write( void const * , size_t );
+void rn4020_write( void const * , size_t );
 
 #endif /* RN4020_H_ */
