@@ -73,8 +73,6 @@
 #define RN4020_SERV_BATT            0x40000000
 /* End of definitions */
 
-
-
 void rn4020_Init( void );
 
 void RN4020_SetServices ( uint32_t );

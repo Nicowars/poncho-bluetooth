@@ -12,18 +12,11 @@
 #include "ciaaPOSIX_stdlib.h"
 #include "ciaaPOSIX_assert.h"
 #include "os.h"
-#include "rn4020.h"
 
 static int32_t fd_uart2;
-extern int32_t fd_out;
-
-
 
 void rn4020_Init(){
-	uint8_t outputs;
 	fd_uart2 = ciaaPOSIX_open("/dev/serial/uart/2", ciaaPOSIX_O_RDWR);
-	   outputs = RN4020_WAKE_SW_MASK|RN4020_WAKE_HW_MASK;
-	   ciaaPOSIX_write(fd_out, &outputs, 1);
 }
 
 void RN4020_SetServices ( uint32_t op ){
@@ -61,10 +54,6 @@ ssize_t rn4020_Read(void * buf, size_t nbyte){
 
 void rn4020_Write(void const * buf, size_t nbyte){
 	 ciaaPOSIX_write(fd_uart2, buf, nbyte);
-}
-
-void rn4020_actualizar(){
-
 }
 
 

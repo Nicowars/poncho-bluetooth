@@ -15,7 +15,9 @@ const char * OFF_LED = "OFF,LED";
 
 extern int32_t fd_out;
 
+extern int32_t fd_in;
 
+static int8_t estado[3];
 
 void controlLED_interprete(int8_t* buf,int32_t ret){
 int i;
@@ -77,6 +79,48 @@ int i;
 	         } else {
 	             com_i = 0;
 	         }
+}
+
+void controlLED_actualizar(){
+	   uint8_t outputs;
+	   uint8_t inputs;
+
+	   ciaaPOSIX_read(fd_in, &inputs, 1);
+
+	   if (((inputs&SWITCH1_MASK)==0)&& (estado[0]==0)){
+		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+		     outputs ^= /*LED1_MASK|*/RN4020_CMD_MASK;
+		     ciaaPOSIX_write(fd_out, &outputs, 1);
+		     estado[0]=1;
+	   }
+	   else
+		   estado[0]=!(inputs&SWITCH1_MASK);
+
+
+	   if (((inputs&SWITCH2_MASK)==0)&& (estado[1]==0)){
+		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+		     outputs ^= (RN4020_WAKE_SW_MASK/*|LED2_MASK*/);
+		     ciaaPOSIX_write(fd_out, &outputs, 1);
+		     estado[1]=1;
+	   }
+	   else
+		   estado[1]=!(inputs&SWITCH2_MASK);
+
+
+	   if (((inputs&SWITCH3_MASK)==0)&& (estado[2]==0)){
+		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
+		     outputs ^= (RN4020_WAKE_HW_MASK|LED0R_MASK);
+		     ciaaPOSIX_write(fd_out, &outputs, 1);
+		     estado[2]=1;
+	   }
+	   else
+		   estado[2]=!(inputs&SWITCH3_MASK);
+}
+
+void controlLED_init(){
+		uint8_t outputs;
+	   outputs = RN4020_WAKE_SW_MASK+RN4020_WAKE_HW_MASK;
+	   ciaaPOSIX_write(fd_out, &outputs, 1);
 }
 
 
