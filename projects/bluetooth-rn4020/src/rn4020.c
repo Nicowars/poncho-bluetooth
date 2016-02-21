@@ -23,14 +23,9 @@ extern int32_t fd_out;
  * no tiene que estar aca... */
 static char * xtoa8( uint32_t hex ){
     char str[8];
-    char aux;
     int8_t ind;
     for (ind = 0; ind < 8; ind++) {
-        aux = hex % 16; 
-        if (aux < 10)
-            str[7-ind] = aux + '0';
-        else
-            str[7-ind] = aux + 'A' - 10;
+        str[7-ind] = hex % 16;
         hex /= 16;
     }
     return str;
