@@ -14,10 +14,10 @@
 #define RN4020_H_
 
 /* Definitions of digital inputs */
-#define SWITCH1_MASK     0x01
-#define SWITCH2_MASK     0x02
-#define SWITCH3_MASK     0x04
-#define SWITCH4_MASK     0x08
+#define BUTTON1_MASK     0x01
+#define BUTTON2_MASK     0x02
+#define BUTTON3_MASK     0x04
+#define BUTTON4_MASK     0x08
 #define RN4020_CTS_MASK		0x10
 /* End of definitions */
 

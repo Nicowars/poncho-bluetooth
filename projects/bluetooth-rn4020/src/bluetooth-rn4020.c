@@ -142,11 +142,21 @@ void inicializacion(void){
 	   ciaaPOSIX_write(fd_uart1, message, ciaaPOSIX_strlen(message));
 
 	   /* RN4020 config. */
-	   rn4020_ToggleEcho();	// ECHO
-	   rn4020_PartialFactory(); // Set factory default config.
-	   rn4020_Write("SS,C0000000\n", 12); // Allow some services: Device Information, Battery
-	   rn4020_Write("SR,38000800\n", 12); // Auto Advertise, Enable MLDP, Auto MLDP Disable, Auto-enter MLDP Mode
-	   rn4020_Reboot(); // Reset module
+	   rn4020_ToggleEcho();
+	   rn4020_PartialFactory();
+       
+       /* Allow some services: Device Information, Battery */
+	   rn4020_Write("SS,C0000000\n", 12);
+	   
+       /** Set features: 
+        * Auto Advertise, 
+        * Enable MLDP, 
+        * Auto MLDP Disable, 
+        * Auto-enter MLDP Mode.
+        */
+       rn4020_Write("SR,38000800\n", 12);
+	   
+       rn4020_Reboot();
 }
 
 /** \brief Initial task
@@ -236,6 +246,8 @@ TASK(SerialTXTask)
 
 /* Breve descripcion de la funcion ButtonsTask
  *
+ * Realiza un encuestamiento de las entradas digitales.
+ * Actualiza los valores de las salidas digitales.
  */
 TASK(ButtonsTask)
 {
@@ -246,7 +258,7 @@ TASK(ButtonsTask)
 	   ciaaPOSIX_read(fd_in, &inputs, 1);
 
 	   //si hubo un flanco descendente en el interruptor 1
-	   if (((inputs&SWITCH1_MASK)==0)&& (estado[0]==0)){
+	   if (((inputs&BUTTON1_MASK)==0)&& (estado[0]==0)){
 		   /* Conmuta el estado de CMD/MLDP */
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
 		     outputs ^= /*LED1_MASK|*/RN4020_CMD_MLDP_MASK;
@@ -254,10 +266,10 @@ TASK(ButtonsTask)
 		     estado[0]=1;
 	   }
 	   else
-		   estado[0]=!(inputs&SWITCH1_MASK);
+		   estado[0]=!(inputs&BUTTON1_MASK);
 
 	   //si hubo un flanco descendente en el interruptor 2
-	   if (((inputs&SWITCH2_MASK)==0)&& (estado[1]==0)){
+	   if (((inputs&BUTTON2_MASK)==0)&& (estado[1]==0)){
 		   
            /* Conmuta el estado de WAKE_SW */
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
@@ -266,10 +278,10 @@ TASK(ButtonsTask)
 		     estado[1]=1;
 	   }
 	   else
-		   estado[1]=!(inputs&SWITCH2_MASK);
+		   estado[1]=!(inputs&BUTTON2_MASK);
 
 	   //si hubo un flanco descendente en el interruptor 3
-	   if (((inputs&SWITCH3_MASK)==0)&& (estado[2]==0)){
+	   if (((inputs&BUTTON3_MASK)==0)&& (estado[2]==0)){
 		   
            /* Conmuta el estado de WAKE_HW */
 		   	 ciaaPOSIX_read(fd_out, &outputs, 1);
@@ -278,7 +290,7 @@ TASK(ButtonsTask)
 		     estado[2]=1;
 	   }
 	   else
-		   estado[2]=!(inputs&SWITCH3_MASK);
+		   estado[2]=!(inputs&BUTTON3_MASK);
 
    /* terminate task */
    TerminateTask();
