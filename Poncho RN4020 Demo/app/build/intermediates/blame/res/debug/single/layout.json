@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "C:\\Users\\jaime\\StudioProjects\\Poncho RN4020 Demo\\app\\build\\intermediates\\res\\merged\\debug\\layout\\indeterminate_progress.xml",
+        "source": "C:\\Users\\jaime\\StudioProjects\\Poncho RN4020 Demo\\app\\src\\main\\res\\layout\\indeterminate_progress.xml"
+    },
+    {
+        "merged": "C:\\Users\\jaime\\StudioProjects\\Poncho RN4020 Demo\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_scan.xml",
+        "source": "C:\\Users\\jaime\\StudioProjects\\Poncho RN4020 Demo\\app\\src\\main\\res\\layout\\device_scan.xml"
+    },
+    {
+        "merged": "C:\\Users\\jaime\\StudioProjects\\Poncho RN4020 Demo\\app\\build\\intermediates\\res\\merged\\debug\\layout\\device_control.xml",
+        "source": "C:\\Users\\jaime\\StudioProjects\\Poncho RN4020 Demo\\app\\src\\main\\res\\layout\\device_control.xml"
+    }
+]
