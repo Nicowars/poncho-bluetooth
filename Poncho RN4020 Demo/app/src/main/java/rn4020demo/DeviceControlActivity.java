@@ -155,6 +155,51 @@ public class DeviceControlActivity extends Activity {
             }
         });
 
+        led0R.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                mDataMDLP.setValue("SET,LED0R" + i + "\r\n");
+                mBluetoothGatt.writeCharacteristic(mDataMDLP);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+
+        });
+
+        led0G.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                mDataMDLP.setValue("SET,LED0G" + i + "\r\n");
+                mBluetoothGatt.writeCharacteristic(mDataMDLP);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+
+        });
+
+        led0B.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                mDataMDLP.setValue("SET,LED0B" + i + "\r\n");
+                mBluetoothGatt.writeCharacteristic(mDataMDLP);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) { }
+
+        });
+
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE); //Get the BluetoothManager
         mBluetoothAdapter = bluetoothManager.getAdapter();                              //Get a reference to the BluetoothAdapter (radio)
         if (mBluetoothAdapter == null) {                                                //Check if we got the BluetoothAdapter
